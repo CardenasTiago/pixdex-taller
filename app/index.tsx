@@ -63,9 +63,19 @@ export default function Index() {
 
         </View>
 
-        <View style={styles.categoriaSerie}>
-            <Text style={styles.serieText} >SERIES</Text>
+        <View>
+            <View style={styles.categoriaSerie}>
+                <Text style={styles.serieText} >SERIES</Text>
+            </View>
+            <View style={styles.borde}>
+                <ScrollView>
+                    <View>
+                        
+                    </View>
+                </ScrollView>
+            </View>
         </View>
+
 
       </View>
     </ScrollView>
@@ -170,7 +180,21 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
 
+  borde:{
+    borderColor: "#403E43",
+    borderWidth: 4,
+    height: "50%",
+    marginBottom: 10,
+    marginLeft: 10,
+    marginRight: 10,
+  },
 
-
+  cajas:{
+    borderWidth: 2,
+    borderRightColor:"#9B87F5",
+    borderBottomColor:"#9B87F5",
+    borderLeftColor:"#4A3D70",
+    borderTopColor:"#4A3D70"
+  }
   
 });
