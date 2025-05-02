@@ -26,10 +26,12 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginBottom: 40,
         paddingHorizontal: 3,
+        marginLeft: 15,
+        marginRight: 15
       },
       
       title: {
-        fontSize: isSmallDevice ? 20 : isMediumDevice ? 22 : isLargeDevice ? 24 : 28,
+        fontSize: isSmallDevice ? 20 : isMediumDevice ? 22 : isLargeDevice ? 30 : 28,
         fontFamily: "PressStart2P",
         color: "#6E59A5",
       },

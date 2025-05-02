@@ -1,13 +1,13 @@
 import {StyleSheet, Text, View, ActivityIndicator, ScrollView, Platform, Dimensions } from "react-native";
 import { useFonts } from 'expo-font';
 import { Navbar } from "@/src/components/navbar";
+import { AnimeCard } from "@/src/components/cards";
 
-// Obtener dimensiones del dispositivo con breakpoints detallados
 const { width, height } = Dimensions.get('window');
-const isSmallDevice = width < 375;  // Teléfonos pequeños
-const isMediumDevice = width >= 375 && width < 768; // Teléfonos normales/tablets pequeñas
-const isLargeDevice = width >= 768 && width < 1024; // Tablets grandes
-const isXLargeDevice = width >= 1024; // PCs y pantallas grandes
+const isSmallDevice = width < 375;
+const isMediumDevice = width >= 375 && width < 768;
+const isLargeDevice = width >= 768 && width < 1024;
+const isXLargeDevice = width >= 1024;
 
 export default function Index() {
   const [fontsLoaded] = useFonts({
@@ -18,65 +18,77 @@ export default function Index() {
     return <ActivityIndicator size="large" color="#fff" />;
   }
   
+  // Datos de las series de anime
+  const animeSeries = [
+    { title: "Fullnetal Alch...", tags: ["Action", "Adventure"] },
+    { title: "AttackCutter", tags: ["Action", "Sci-Fi"] },
+    { title: "DeathNate", tags: ["Mystery", "Thriller"] },
+    { title: "Fullnetal Alch...", tags: ["Action", "Adventure"] },
+    { title: "Attack on Titan", tags: ["Action", "Drama"] },
+    { title: "Death Note", tags: ["Mystery", "Thriller"] }
+  ];
+
   return (
     <ScrollView contentContainerStyle={{flexGrow: 1}}>
       <View style={styles.container}>     
-        {/* Navbar */}
-        <View>
+        <View style={styles.navbarContainer}>
             <Navbar/>
         </View>
       
-        {/* Game Boxes */}
-        <View style={styles.boxContainer}>
-          {/* Purple Game Box */}
-          <View style={styles.gameBox}>
-            <View style={styles.purpleBox}>
-              <View style={styles.contentContainer}>
-                <Text style={styles.gameTitle}>
-                  {isSmallDevice ? "Desafío\nAhorcado" : "Desafío del\nAhorcado"}
-                </Text>
-                <Text style={styles.gameDescription}>
-                  Adivina los títulos letra por letra. ¿Cuántos puedes identificar?
-                </Text>
-              </View>
-              <View style={styles.buttonContainer}>
-                <Text style={styles.playText}>Jugar</Text>
+        <View style={styles.mainContent}>
+          {/* Game Boxes */}
+          <View style={styles.boxContainer}>
+            <View style={styles.gameBox}>
+              <View style={styles.purpleBox}>
+                <View style={styles.contentContainer}>
+                  <Text style={styles.gameTitle}>
+                    {isSmallDevice ? "Desafío\nAhorcado" : "Desafío del\nAhorcado"}
+                  </Text>
+                  <Text style={styles.gameDescription}>
+                    Adivina los títulos letra por letra. ¿Cuántos puedes identificar?
+                  </Text>
+                </View>
+                <View style={styles.buttonContainer}>
+                  <Text style={styles.playText}>Jugar</Text>
+                </View>
               </View>
             </View>
-          </View>
-          
-          {/* Green Game Box */}
-          <View style={styles.gameBox}>
-            <View style={styles.greenBox}>
-              <View style={styles.contentContainer}>
-                <Text style={styles.gameTitle}>Pixel Reveal</Text>
-                <Text style={styles.gameDescription}>
-                  Identifica títulos desde imágenes pixeladas.¡Pon a prueba tu memoria visual!
-                  {(isMediumDevice || isXLargeDevice)}
-                </Text>
-              </View>
-              <View style={styles.buttonContainer}>
-                <Text style={styles.playText}>Jugar</Text>
+            
+            <View style={styles.gameBox}>
+              <View style={styles.greenBox}>
+                <View style={styles.contentContainer}>
+                  <Text style={styles.gameTitle}>Pixel Reveal</Text>
+                  <Text style={styles.gameDescription}>
+                    Identifica títulos desde imágenes pixeladas.¡Pon a prueba tu memoria visual!
+                  </Text>
+                </View>
+                <View style={styles.buttonContainer}>
+                  <Text style={styles.playText}>Jugar</Text>
+                </View>
               </View>
             </View>
           </View>
 
-        </View>
-
-        <View>
-            <View style={styles.categoriaSerie}>
-                <Text style={styles.serieText} >SERIES</Text>
+          {/* Sección de Series con Scroll Horizontal CORREGIDA */}
+          <View style={styles.audiovisuales}>
+            <View style={styles.categoriaSerieContainer}>
+              <View style={styles.categoria}>
+                  <Text style={styles.serieText}>ANIME</Text>
+              </View>
             </View>
             <View style={styles.borde}>
-                <ScrollView>
-                    <View>
-                        
-                    </View>
-                </ScrollView>
+              <ScrollView 
+                horizontal 
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.horizontalScrollContent}
+              >
+                 {animeSeries.map((series, index) => (
+                    <AnimeCard key={index} title={series.title} tags={series.tags} />
+                  ))}
+              </ScrollView>
             </View>
+          </View>
         </View>
-
-
       </View>
     </ScrollView>
   );
@@ -88,7 +100,18 @@ const styles = StyleSheet.create({
     backgroundColor: "#1A1F2C",
     paddingTop: Platform.OS === 'ios' ? 50 : 30,
     paddingBottom: 20,
-    paddingHorizontal: isXLargeDevice ? width * 0.1 : 12,
+    alignItems: 'center',
+  },
+  
+  mainContent: {
+    width: '100%',
+    maxWidth: isXLargeDevice ? 1280 : '100%',
+    paddingHorizontal: isXLargeDevice ? 20 : 12,
+  },
+  
+  navbarContainer: {
+    width: '100%',
+    marginBottom: 15,
   },
   
   boxContainer: {
@@ -96,14 +119,11 @@ const styles = StyleSheet.create({
     flexWrap: isXLargeDevice ? 'wrap' : 'nowrap',
     justifyContent: "space-between",
     marginBottom: 15,
-    paddingHorizontal: 3,
-    maxWidth: isXLargeDevice ? 1200 : '100%',
-    alignSelf: 'center',
     width: '100%',
   },
   
   gameBox: {
-    width: isXLargeDevice ? "45%" : "48.5%",
+    width: isXLargeDevice ? "48.5%" : "48.5%",
     marginBottom: isXLargeDevice ? 20 : 0,
   },
   
@@ -143,7 +163,7 @@ const styles = StyleSheet.create({
   
   gameTitle: {
     color: "white",
-    fontSize: isSmallDevice ? 12 : isMediumDevice ? 14 : isLargeDevice ? 25 : 18,
+    fontSize: isSmallDevice ? 12 : isMediumDevice ? 14 : isLargeDevice ? 22 : 24,
     fontFamily: "PressStart2P",
     marginBottom: isSmallDevice ? 4 : isMediumDevice ? 6 : 8,
     lineHeight: isSmallDevice ? 16 : isMediumDevice ? 18 : 28,
@@ -151,50 +171,57 @@ const styles = StyleSheet.create({
   
   gameDescription: {
     color: "white",
-    fontSize: isSmallDevice ? 10 : isMediumDevice ? 15 : isLargeDevice ? 21 : 16,
+    fontSize: isSmallDevice ? 10 : isMediumDevice ? 12 : isLargeDevice ? 18 : 20,
     lineHeight: isSmallDevice ? 13 : isMediumDevice ? 16 : 18,
   },
   
   playText: {
     color: "white",
     fontFamily: "PressStart2P",
-    fontSize: isSmallDevice ? 9 : isMediumDevice ? 11 : 17,
+    fontSize: isSmallDevice ? 9 : isMediumDevice ? 11 : 15,
   },
 
-  categoriaSerie:{
+  audiovisuales: {
+    width: '100%',
+    marginBottom: 20,
+  },
+
+  categoriaSerieContainer: {
+    paddingHorizontal: 20,
+    marginBottom: -15,
+    zIndex: 1,
+  },
+
+  categoria: {
     backgroundColor: "#6E59A5",
     borderWidth: 2,
-    borderColor:"#9B87F5",
-    fontWeight: 700,
+    borderColor: "#9B87F5",
     width: 100,
-    height: 30,
-    marginTop: 10,
-    marginLeft: 20,
-    justifyContent: "center"
+    height: isSmallDevice ? 28 : isMediumDevice ? 30 : 32,
+    justifyContent: "center",
+    alignSelf: 'flex-start',
   },
 
-  serieText:{
+  serieText: {
     color: "white",
-    fontSize: isSmallDevice ? 10 : isMediumDevice ? 11 : isLargeDevice ? 12: 16,
+    fontSize: isSmallDevice ? 10 : isMediumDevice ? 11 : 12,
     fontFamily: "PressStart2P",
-    alignSelf: "center",
+    textAlign: "center",
+    paddingVertical: 4,
   },
 
-  borde:{
+  borde: {
     borderColor: "#403E43",
     borderWidth: 4,
-    height: "50%",
-    marginBottom: 10,
-    marginLeft: 10,
-    marginRight: 10,
+    height: isSmallDevice ? 250 : isMediumDevice ? 300 : isLargeDevice ? 400: 450,
+    marginHorizontal: 10,
+    paddingTop: 20,
   },
 
-  cajas:{
-    borderWidth: 2,
-    borderRightColor:"#9B87F5",
-    borderBottomColor:"#9B87F5",
-    borderLeftColor:"#4A3D70",
-    borderTopColor:"#4A3D70"
-  }
-  
+  horizontalScrollContent: {
+    paddingHorizontal: 10,
+    paddingBottom: 15,
+  },
+
+
 });
