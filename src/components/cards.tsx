@@ -1,4 +1,4 @@
-// src/components/AnimeCard.tsx
+// src/components/Card.tsx
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 
 const { width } = Dimensions.get('window');
@@ -6,14 +6,15 @@ const isSmallDevice = width < 375;
 const isMediumDevice = width >= 375 && width < 768;
 const isLargeDevice = width >= 768 && width < 1024;
 
-type AnimeCardProps = {
+type CardProps = {
   title: string;
   tags: string[];
+  description: string;
 };
 
-export const AnimeCard = ({ title, tags }: AnimeCardProps) => {
+export const Card = ({ title, tags, description }: CardProps) => {
   return (
-    <View style={styles.animeCardHorizontal}>
+    <View style={styles.CardHorizontal}>
       <View style={styles.imageContainerHorizontal}>
         <View style={styles.imagePlaceholder}>
           <Text style={styles.placeholderText}>{title}</Text>
@@ -34,7 +35,7 @@ export const AnimeCard = ({ title, tags }: AnimeCardProps) => {
 };
 
 const styles = StyleSheet.create({
-    animeCardHorizontal: {
+    CardHorizontal: {
         width: isSmallDevice ? 160 : isMediumDevice ? 170 : isLargeDevice ? 190 : 180,
         height: '100%', // Ocupa toda la altura disponible
         marginRight: isSmallDevice ? 12 : 15,

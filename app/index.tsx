@@ -1,7 +1,11 @@
-import {StyleSheet, Text, View, ActivityIndicator, ScrollView, Platform, Dimensions } from "react-native";
+import {StyleSheet, Text, View, ActivityIndicator, ScrollView, Platform, Dimensions, FlatList } from "react-native";
 import { useFonts } from 'expo-font';
 import { Navbar } from "@/src/components/navbar";
-import { AnimeCard } from "@/src/components/cards";
+import { Card } from "@/src/components/cards";
+import { GameCard } from "@/src/components/games";
+import { ContenidoAudiovisual, contenidosAudiovisuales } from "@/src/data/contenidoAudiovisual";
+import { ITipoContenidoAudiovisual, tiposContenidoAudiovisual } from "@/src/data/tiposContenidoAudiovisual";
+import { generosContenidoAudiovisual } from "@/src/data/generosContenidoAudiovisual";
 
 const { width, height } = Dimensions.get('window');
 const isSmallDevice = width < 375;
@@ -14,80 +18,73 @@ export default function Index() {
     'PressStart2P': require('../src/assets/fonts/PressStart2P-Regular.ttf'),
   });
 
+  const series = contenidosAudiovisuales.filter(item => item.tipoId === 1);
+  const peliculas = contenidosAudiovisuales.filter(item => item.tipoId === 2);
+  const animes = contenidosAudiovisuales.filter(item => item.tipoId === 3);
+
+  const getTipoNombre = (tipoId: number) => {
+    const tipo = tiposContenidoAudiovisual.find(t => t.id === tipoId);
+    return tipo ? tipo.plural.toUpperCase() : '';
+  };
+
   if (!fontsLoaded) {
     return <ActivityIndicator size="large" color="#fff" />;
   }
-  
-  // Datos de las series de anime
-  const animeSeries = [
-    { title: "Fullnetal Alch...", tags: ["Action", "Adventure"] },
-    { title: "AttackCutter", tags: ["Action", "Sci-Fi"] },
-    { title: "DeathNate", tags: ["Mystery", "Thriller"] },
-    { title: "Fullnetal Alch...", tags: ["Action", "Adventure"] },
-    { title: "Attack on Titan", tags: ["Action", "Drama"] },
-    { title: "Death Note", tags: ["Mystery", "Thriller"] }
-  ];
+
+  const renderSection = (data: ContenidoAudiovisual[], tipoId: number) => (
+    <View style={styles.audiovisuales}>
+      <View style={styles.categoriaSerieContainer}>
+        <View style={styles.categoria}>
+          <Text style={styles.serieText}>{getTipoNombre(tipoId)}</Text>
+        </View>
+      </View>
+      <View style={styles.borde}>
+        <FlatList
+          horizontal
+          data={data}
+          renderItem={({ item }) => (
+            <Card 
+              title={item.nombre} 
+              tags={item.generos.map(genId => {
+                const genero = generosContenidoAudiovisual.find(g => g.id === genId);
+                return genero ? genero.nombre : '';
+              }).filter(Boolean)} 
+              description={item.descripcion}
+            />
+          )}
+          keyExtractor={item => item.id.toString()}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.horizontalScrollContent}
+        />
+      </View>
+    </View>
+  );
 
   return (
     <ScrollView contentContainerStyle={{flexGrow: 1}}>
       <View style={styles.container}>     
         <View style={styles.navbarContainer}>
-            <Navbar/>
+          <Navbar/>
         </View>
       
         <View style={styles.mainContent}>
-          {/* Game Boxes */}
-          <View style={styles.boxContainer}>
-            <View style={styles.gameBox}>
-              <View style={styles.purpleBox}>
-                <View style={styles.contentContainer}>
-                  <Text style={styles.gameTitle}>
-                    {isSmallDevice ? "Desafío\nAhorcado" : "Desafío del\nAhorcado"}
-                  </Text>
-                  <Text style={styles.gameDescription}>
-                    Adivina los títulos letra por letra. ¿Cuántos puedes identificar?
-                  </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                  <Text style={styles.playText}>Jugar</Text>
-                </View>
-              </View>
-            </View>
-            
-            <View style={styles.gameBox}>
-              <View style={styles.greenBox}>
-                <View style={styles.contentContainer}>
-                  <Text style={styles.gameTitle}>Pixel Reveal</Text>
-                  <Text style={styles.gameDescription}>
-                    Identifica títulos desde imágenes pixeladas.¡Pon a prueba tu memoria visual!
-                  </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                  <Text style={styles.playText}>Jugar</Text>
-                </View>
-              </View>
-            </View>
-          </View>
+        <View style={styles.boxContainer}>
+            <GameCard
+              title={isSmallDevice ? "Desafío\nAhorcado" : "Desafío del\nAhorcado"}
+              description="Adivina los títulos letra por letra. ¿Cuántos puedes identificar?"
+              color="purple"
+            />
+            <GameCard
+              title="Pixel Reveal"
+              description="Identifica títulos desde imágenes pixeladas. ¡Pon a prueba tu memoria visual!"
+              color="green"
+            />
+        </View>
 
-          {/* Sección de Series con Scroll Horizontal CORREGIDA */}
-          <View style={styles.audiovisuales}>
-            <View style={styles.categoriaSerieContainer}>
-              <View style={styles.categoria}>
-                  <Text style={styles.serieText}>ANIME</Text>
-              </View>
-            </View>
-            <View style={styles.borde}>
-              <ScrollView 
-                horizontal 
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.horizontalScrollContent}
-              >
-                 {animeSeries.map((series, index) => (
-                    <AnimeCard key={index} title={series.title} tags={series.tags} />
-                  ))}
-              </ScrollView>
-            </View>
-          </View>
+          {/* Secciones de contenido */}
+          {renderSection(series, 1)}
+          {renderSection(peliculas, 2)}
+          {renderSection(animes, 3)}
         </View>
       </View>
     </ScrollView>
@@ -131,11 +128,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#6E59A5",
     padding: isSmallDevice ? 8 : isMediumDevice ? 10 : isLargeDevice ? 12 : 14,
     borderWidth: 3,
-    borderTopColor: "#8F77CD",
-    borderLeftColor: "#8F77CD",
-    borderRightColor: "#4A3D70",
-    borderBottomColor: "#4A3D70",
-    height: isSmallDevice ? 130 : isMediumDevice ? 140 : isLargeDevice ? 160 : 200,
+    borderColor: "#4A3D70",
+    height: isSmallDevice ? 110 : isMediumDevice ? 120 : isLargeDevice ? 130 : 150,
     position: "relative",
   },
   
@@ -143,11 +137,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#4CAF50",
     padding: isSmallDevice ? 8 : isMediumDevice ? 10 : isLargeDevice ? 12 : 14,
     borderWidth: 3,
-    borderTopColor: "#6ECF70",
-    borderLeftColor: "#6ECF70",
-    borderRightColor: "#2E8B30",
-    borderBottomColor: "#2E8B30",
-    height: isSmallDevice ? 130 : isMediumDevice ? 140 : isLargeDevice ? 160 : 200,
+    borderColor: "#4A3D70",
+    height: isSmallDevice ? 100 : isMediumDevice ? 120 : isLargeDevice ? 130: 150,
     position: "relative",
   },
   
@@ -163,7 +154,7 @@ const styles = StyleSheet.create({
   
   gameTitle: {
     color: "white",
-    fontSize: isSmallDevice ? 12 : isMediumDevice ? 14 : isLargeDevice ? 22 : 24,
+    fontSize: isSmallDevice ? 12 : isMediumDevice ? 14 : isLargeDevice ? 18 : 24,
     fontFamily: "PressStart2P",
     marginBottom: isSmallDevice ? 4 : isMediumDevice ? 6 : 8,
     lineHeight: isSmallDevice ? 16 : isMediumDevice ? 18 : 28,
@@ -171,14 +162,14 @@ const styles = StyleSheet.create({
   
   gameDescription: {
     color: "white",
-    fontSize: isSmallDevice ? 10 : isMediumDevice ? 12 : isLargeDevice ? 18 : 20,
+    fontSize: isSmallDevice ? 10 : isMediumDevice ? 12 : isLargeDevice ? 14 : 20,
     lineHeight: isSmallDevice ? 13 : isMediumDevice ? 16 : 18,
   },
   
   playText: {
     color: "white",
     fontFamily: "PressStart2P",
-    fontSize: isSmallDevice ? 9 : isMediumDevice ? 11 : 15,
+    fontSize: isSmallDevice ? 9 : isMediumDevice ? 11 : 13,
   },
 
   audiovisuales: {
@@ -196,10 +187,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#6E59A5",
     borderWidth: 2,
     borderColor: "#9B87F5",
-    width: 100,
-    height: isSmallDevice ? 28 : isMediumDevice ? 30 : 32,
+    height: isSmallDevice ? 30 : isMediumDevice ? 32 : 34,
     justifyContent: "center",
     alignSelf: 'flex-start',
+    padding: 5
   },
 
   serieText: {
