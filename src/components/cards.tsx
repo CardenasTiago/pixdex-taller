@@ -1,7 +1,7 @@
 // src/components/Card.tsx
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
-import { router } from 'expo-router';
+import { Href, router } from 'expo-router';
 import { TextPressStart2P } from "@/src/components/font";
 import { ROUTES } from '@/src/navegation/routes';
 
@@ -19,7 +19,7 @@ type CardProps = {
 
 export const Card = ({ id, title, tags, description }: CardProps) => {
   const handlePress = () => {
-    router.push(`${ROUTES.DETAIL}${id}`);
+    router.push(`${ROUTES.DETAIL}${id.toString()}` as Href);
 };
 
   return (
