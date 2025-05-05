@@ -1,5 +1,9 @@
 // src/components/Card.tsx
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { router } from 'expo-router';
+import { TextPressStart2P } from "@/src/components/font";
+import { ROUTES } from '@/src/navegation/routes';
 
 const { width } = Dimensions.get('window');
 const isSmallDevice = width < 375;
@@ -7,21 +11,30 @@ const isMediumDevice = width >= 375 && width < 768;
 const isLargeDevice = width >= 768 && width < 1024;
 
 type CardProps = {
+  id: number;
   title: string;
   tags: string[];
-  description: string;
+  description: string;  
 };
 
-export const Card = ({ title, tags, description }: CardProps) => {
+export const Card = ({ id, title, tags, description }: CardProps) => {
+  const handlePress = () => {
+    router.push(`${ROUTES.DETAIL}${id}`);
+};
+
   return (
-    <View style={styles.CardHorizontal}>
+    <TouchableOpacity 
+      style={styles.CardHorizontal} 
+      onPress={handlePress}
+      activeOpacity={0.5}
+    >
       <View style={styles.imageContainerHorizontal}>
         <View style={styles.imagePlaceholder}>
           <Text style={styles.placeholderText}>{title}</Text>
         </View>
       </View>
       <View style={styles.cardContentContainer}>
-        <Text style={styles.cardTitle}>{title}</Text>
+        <TextPressStart2P style={styles.cardTitle}>{title}</TextPressStart2P>
         <View style={styles.tagsContainer}>
           {tags.map((tag, index) => (
             <View key={index} style={styles.tagPill}>
@@ -30,7 +43,7 @@ export const Card = ({ title, tags, description }: CardProps) => {
           ))}
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

@@ -1,5 +1,6 @@
 import { View, Text, TouchableOpacity, StyleSheet, Platform, Dimensions } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
+import {TextPressStart2P} from "@/src/components/font"
 
 // Definir dimensiones y breakpoints
 const { width } = Dimensions.get('window');
@@ -10,10 +11,10 @@ const isLargeDevice = width >= 768 && width < 1024;
 export function Navbar() {  // Nombre del componente con mayúscula
     return(
         <View style={styles.navbar}>
-            <Text style={styles.title}>Pixdex</Text>
+            <TextPressStart2P style={styles.title}>Pixdex</TextPressStart2P>
             <TouchableOpacity style={styles.filterContainer}>
                 <Ionicons name="settings" size={isSmallDevice ? 16 : isMediumDevice ? 18 : 20} color="white" />
-                <Text style={styles.filtrar}>FILTRAR</Text>
+                <TextPressStart2P style={styles.filtrar}>FILTRAR</TextPressStart2P>
             </TouchableOpacity>
         </View>  // Cierre correcto con </View>
     );

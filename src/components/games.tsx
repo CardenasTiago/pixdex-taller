@@ -1,6 +1,5 @@
-// src/components/GameCard.tsx
-
 import { Text, View, StyleSheet, Platform } from 'react-native';
+import {TextPressStart2P} from "@/src/components/font"
 
 interface Props {
   title: string;
@@ -17,11 +16,11 @@ export const GameCard = ({ title, description, color }: Props) => {
     <View style={styles.gameBox}>
       <View style={boxStyle}>
         <View style={styles.contentContainer}>
-          <Text style={styles.gameTitle}>{title}</Text>
+          <TextPressStart2P style={styles.gameTitle}>{title}</TextPressStart2P>
           <Text style={styles.gameDescription}>{description}</Text>
         </View>
         <View style={styles.buttonContainer}>
-          <Text style={styles.playText}>Jugar</Text>
+          <TextPressStart2P style={styles.playText}>Jugar</TextPressStart2P>
         </View>
       </View>
     </View>
