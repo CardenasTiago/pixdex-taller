@@ -13,8 +13,14 @@ type DetailsCardProps = {
 };
 
 export const DetailsCard = ({ cardId }: DetailsCardProps) => {
-  // Obtener el contenido basado en el ID
   const contenido = contenidosAudiovisuales.find(item => item.id === cardId);
+  if (!contenido) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <TextPressStart2P style={styles.errorText}>Contenido no encontrado</TextPressStart2P>
+      </SafeAreaView>
+    );
+  }
   const tipoContenido = tiposContenidoAudiovisual.find(t => t.id === contenido.tipoId);
   const generos = contenido.generos.map(genId => {
     return generosContenidoAudiovisual.find(g => g.id === genId)?.nombre || '';
@@ -23,7 +29,6 @@ export const DetailsCard = ({ cardId }: DetailsCardProps) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
             <View style={styles.backContent}>
@@ -33,7 +38,6 @@ export const DetailsCard = ({ cardId }: DetailsCardProps) => {
           </TouchableOpacity>
         </View>
 
-        {/* Contenido principal */}
         <View style={styles.contentContainer}>
           {/* Imagen */}
           <View style={styles.imageContainer}>
@@ -52,16 +56,13 @@ export const DetailsCard = ({ cardId }: DetailsCardProps) => {
             )}
           </View>
 
-          {/* Información del contenido */}
           <View style={styles.infoContainer}>
-            {/* Título y tipo */}
             <View style={styles.titleContainer}>
               <TextPressStart2P style={styles.title}>
                 {contenido.nombre}
               </TextPressStart2P>
             </View>
 
-            {/* Descripción */}
             <View style={styles.section}>
                 {tipoContenido && (
                     <View style={styles.genresContainer}>
@@ -75,7 +76,6 @@ export const DetailsCard = ({ cardId }: DetailsCardProps) => {
               <Text style={styles.description}>{contenido.descripcion}</Text>
             </View>
 
-            {/* Géneros */}
             {generos.length > 0 && (
               <View style={styles.section}>
                 <TextPressStart2P style={styles.sectionTitle}>Geners</TextPressStart2P>

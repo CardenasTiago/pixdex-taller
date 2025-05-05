@@ -2,7 +2,6 @@ import { Text } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import DetailsCard from "@/src/screens/DetailsCard";
 
-// Mejorar el tipado
 type SearchParams = {
   cardId: string;
 };
@@ -15,7 +14,6 @@ export default function CardDetailRoute() {
     return <Text>Error: No card ID provided</Text>;
   }
 
-  // Convert to number since router params are strings
   const numericCardId = parseInt(cardId, 10);
   
   if (isNaN(numericCardId)) {
