@@ -42,6 +42,7 @@ export const CardScroll = ({ tipoId }: CardScrollProps) => {
                 return genero ? genero.nombre : '';
               }).filter(Boolean)} 
               description={item.descripcion}
+              imageUrl={item.imageUrl}
             />
           )}
           keyExtractor={(item) => `${tipoId}-${item.id}`}

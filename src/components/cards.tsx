@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-nati
 import { Href, router } from 'expo-router';
 import { TextPressStart2P } from "@/src/components/font";
 import { ROUTES } from '@/src/navegation/routes';
+import { Image } from 'expo-image';
 
 const { width } = Dimensions.get('window');
 const isSmallDevice = width < 375;
@@ -15,9 +16,10 @@ type CardProps = {
   title: string;
   tags: string[];
   description: string;  
+  imageUrl: string;
 };
 
-export const Card = ({ id, title, tags, description }: CardProps) => {
+export const Card = ({ id, title, tags, description, imageUrl }: CardProps) => {
   const handlePress = () => {
     router.push(`${ROUTES.DETAIL}${id.toString()}` as Href);
 };
@@ -29,9 +31,8 @@ export const Card = ({ id, title, tags, description }: CardProps) => {
       activeOpacity={0.5}
     >
       <View style={styles.imageContainerHorizontal}>
-        <View style={styles.imagePlaceholder}>
-          <Text style={styles.placeholderText}>{title}</Text>
-        </View>
+          <Image source={{uri: imageUrl}} style={styles.image}/>
+          
       </View>
       <View style={styles.cardContentContainer}>
         <TextPressStart2P style={styles.cardTitle}>{title}</TextPressStart2P>
@@ -113,5 +114,10 @@ const styles = StyleSheet.create({
       tagText: {
         color: 'white',
         fontSize: isSmallDevice ? 8 : 10,
+      },
+
+      image: {
+        width: '100%',
+        height: '100%',
       },
 });
