@@ -6,6 +6,7 @@ import { contenidosAudiovisuales } from "@/src/data/contenidoAudiovisual";
 import { tiposContenidoAudiovisual } from "@/src/data/tiposContenidoAudiovisual";
 import { generosContenidoAudiovisual } from "@/src/data/generosContenidoAudiovisual";
 import { TextPressStart2P } from "@/src/components/font";
+import {Colors} from "@/src/constants/Colors";
 
 type CardScrollProps = {
   tipoId: number;
@@ -61,10 +62,10 @@ const styles = StyleSheet.create({
   },
 
   categoria: {
-    backgroundColor: "#6E59A5",
+    backgroundColor: Colors.purpura,
     borderWidth: 2,
-    borderColor: "#9B87F5",
-    height: 32, // Tamaño fijo para Android
+    borderColor: Colors.purpuraClaro,
+    height: 32,
     justifyContent: "center",
     alignSelf: 'flex-start',
     padding: 5
@@ -72,15 +73,15 @@ const styles = StyleSheet.create({
 
   serieText: {
     color: "white",
-    fontSize: 11, // Tamaño fijo para Android
+    fontSize: 11,
     textAlign: "center",
     paddingVertical: 4,
   },
 
   borde: {
-    borderColor: "#403E43",
+    borderColor: Colors.grisOscuro,
     borderWidth: 4,
-    height: 400, // Tamaño fijo para Android
+    height: 400, 
     marginHorizontal: 10,
     paddingTop: 20,
   },

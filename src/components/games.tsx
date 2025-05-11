@@ -1,5 +1,6 @@
 import { Text, View, StyleSheet, Platform } from 'react-native';
-import {TextPressStart2P} from "@/src/components/font"
+import {TextPressStart2P} from "@/src/components/font";
+import {Colors} from "@/src/constants/Colors";
 
 interface Props {
   title: string;
@@ -33,23 +34,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   purpleBox: {
-    backgroundColor: "#6E59A5",
+    backgroundColor: Colors.purpura,
     borderWidth: 3,
-    borderTopColor: "#8F77CD",
-    borderLeftColor: "#8F77CD",
-    borderRightColor: "#4A3D70",
-    borderBottomColor: "#4A3D70",
+    borderColor: Colors.purpuraOscuro,
     padding,
     height: 160,
     position: "relative",
   },
   greenBox: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: Colors.verde,
     borderWidth: 3,
-    borderTopColor: "#6ECF70",
-    borderLeftColor: "#6ECF70",
-    borderRightColor: "#2E8B30",
-    borderBottomColor: "#2E8B30",
+    borderColor: Colors.purpura,
     padding,
     height: 160,
     position: "relative",

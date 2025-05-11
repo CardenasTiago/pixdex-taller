@@ -10,9 +10,8 @@ export default function RootLayout() {
                 headerBackButtonDisplayMode: "minimal",
                 headerTitleAlign: "center",
                 }}
-            >
-                <Stack.Screen name="details/[id]" options={{ headerShown: true }} />
-            </Stack>
+            />
+
         </View>
     );
 }

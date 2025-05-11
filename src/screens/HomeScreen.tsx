@@ -2,6 +2,7 @@ import {StyleSheet, Text, View, ActivityIndicator, ScrollView, Platform, Dimensi
 import { Navbar } from "@/src/components/navbar";
 import { GameCard } from "@/src/components/games";
 import { CardScroll } from "@/src/components/cardsScroll";
+import {Colors} from "@/src/constants/Colors";
 import {ROUTES} from "@/src/navegation/routes"
 
 export function HomeScreen() {
@@ -38,7 +39,7 @@ export function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#1A1F2C",
+    backgroundColor: Colors.fondo,
     paddingTop: 30,
     paddingBottom: 20,
     alignItems: 'center',

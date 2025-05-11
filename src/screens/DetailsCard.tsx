@@ -1,16 +1,16 @@
-// src/screens/DetailsCard.tsx
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView} from 'react-native';
-import { router } from 'expo-router';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { TextPressStart2P } from "@/src/components/font";
 import { contenidosAudiovisuales } from "@/src/data/contenidoAudiovisual";
-import { generosContenidoAudiovisual } from "@/src/data/generosContenidoAudiovisual";
 import { tiposContenidoAudiovisual } from "@/src/data/tiposContenidoAudiovisual";
-import { Ionicons } from '@expo/vector-icons';
-import {Image} from 'expo-image';
+import { generosContenidoAudiovisual } from "@/src/data/generosContenidoAudiovisual";
+import { BackButton } from "@/src/components/backButtom";
+import { GenreTags } from "@/src/components/genreTags";
+import { Image } from 'expo-image';
+import { Colors } from "@/src/constants/Colors";
 
 type DetailsCardProps = {
-    cardId: number;
+  cardId: number;
 };
 
 export const DetailsCard = ({ cardId }: DetailsCardProps) => {
@@ -22,39 +22,26 @@ export const DetailsCard = ({ cardId }: DetailsCardProps) => {
       </SafeAreaView>
     );
   }
+
   const tipoContenido = tiposContenidoAudiovisual.find(t => t.id === contenido.tipoId);
   const generos = contenido.generos.map(genId => {
     return generosContenidoAudiovisual.find(g => g.id === genId)?.nombre || '';
   }).filter(Boolean);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-            <View style={styles.backContent}>
-                <Ionicons name="arrow-back" size={16} color="white" />
-                <TextPressStart2P style={styles.backText}>BACK</TextPressStart2P>
-            </View>
-          </TouchableOpacity>
+          <BackButton />
         </View>
 
         <View style={styles.contentContainer}>
-          {/* Imagen */}
           <View style={styles.imageContainer}>
-            {contenido.imageUrl ? (
-              <Image 
-                source={{ uri: contenido.imageUrl }} 
-                style={styles.image}
-                resizeMode="cover"
-              />
-            ) : (
-              <View style={styles.imagePlaceholder}>
-                <TextPressStart2P style={styles.placeholderText}>
-                  {contenido.nombre}
-                </TextPressStart2P>
-              </View>
-            )}
+            <Image 
+              source={{ uri: contenido.imageUrl }} 
+              style={styles.image}
+              contentFit="cover"
+            />
           </View>
 
           <View style={styles.infoContainer}>
@@ -64,42 +51,35 @@ export const DetailsCard = ({ cardId }: DetailsCardProps) => {
               </TextPressStart2P>
             </View>
 
-            <View style={styles.section}>
-                {tipoContenido && (
-                    <View style={styles.genresContainer}>
-                        <View style={styles.genreBadge}>
-                            <Text style={styles.typeText}>
-                                {tipoContenido.singular.toUpperCase()}
-                            </Text>
-                        </View>
-                    </View>
-                )}
-              <Text style={styles.description}>{contenido.descripcion}</Text>
-            </View>
+            {tipoContenido && (
+              <View style={styles.typeContainer}>
+                <View style={styles.typeBadge}>
+                  <Text style={styles.typeText}>
+                    {tipoContenido.singular.toUpperCase()}
+                  </Text>
+                </View>
+              </View>
+            )}
+
+            <Text style={styles.description}>{contenido.descripcion}</Text>
 
             {generos.length > 0 && (
               <View style={styles.section}>
-                <TextPressStart2P style={styles.sectionTitle}>Geners</TextPressStart2P>
-                <View style={styles.genresContainer}>
-                  {generos.map((genero, index) => (
-                    <View key={index} style={styles.genreBadge}>
-                      <Text style={styles.genreText}>{genero.toUpperCase()}</Text>
-                    </View>
-                  ))}
-                </View>
+                <TextPressStart2P style={styles.sectionTitle}>GÉNEROS</TextPressStart2P>
+                <GenreTags genres={generos} />
               </View>
             )}
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1A1F2C',
+    backgroundColor: Colors.fondo,
   },
   scrollContainer: {
     flexGrow: 1,
@@ -115,23 +95,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
   },
-  backButton: {
-    backgroundColor: '#6E59A5',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  backContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  backText: {
-    color: '#fff',
-    fontSize: 16,
-    marginLeft: 8,
-  },
   contentContainer: {
     flex: 1,
     paddingHorizontal: 16,
@@ -142,68 +105,56 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     overflow: 'hidden',
     marginBottom: 20,
-    backgroundColor: '#2A2F3B',
+    backgroundColor: Colors.grisOscuro,
   },
   image: {
     width: '100%',
     height: '100%',
   },
-  imagePlaceholder: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#403E43',
-  },
-  placeholderText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    textAlign: 'center',
-    padding: 10,
-  },
   infoContainer: {
     flex: 1,
   },
   titleContainer: {
-    marginBottom: 20,
+    marginBottom: 12,
   },
   title: {
-    color: '#9B87F5',
+    color: Colors.purpuraClaro,
     fontSize: 18,
+  },
+  typeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+    gap: 8,
+  },
+  typeLabel: {
+    color: Colors.verde,
+    fontSize: 12,
+  },
+  typeBadge: {
+    backgroundColor: Colors.grisOscuro,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 4,
   },
   typeText: {
     color: 'white',
-    fontSize: 13,
+    fontSize: 12,
+    fontWeight: 'bold',
   },
   section: {
     marginBottom: 20,
   },
   sectionTitle: {
-    color: '#4ADE80',
-    fontSize: 12,
-    marginBottom: 8,
+    color: Colors.verde,
+    fontSize: 14,
+    marginBottom: 12,
   },
   description: {
     color: '#E2E8F0',
     fontSize: 14,
     lineHeight: 20,
-  },
-  genresContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginTop: 8,
-  },
-  genreBadge: {
-    backgroundColor: '#2D3748',
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    marginRight: 8,
-    marginBottom: 8,
-    borderRadius: 4,
-  },
-  genreText: {
-    color: 'white',
-    fontSize: 10,
-    fontWeight: 'bold',
+    marginBottom: 20,
   },
 });
 

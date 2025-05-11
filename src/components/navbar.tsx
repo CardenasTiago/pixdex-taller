@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet, Platform, Dimensions } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
-import {TextPressStart2P} from "@/src/components/font"
+import {TextPressStart2P} from "@/src/components/font";
+import {Colors} from "@/src/constants/Colors";
 
 // Definir dimensiones y breakpoints
 const { width } = Dimensions.get('window');
@@ -34,21 +35,21 @@ const styles = StyleSheet.create({
       title: {
         fontSize: isSmallDevice ? 20 : isMediumDevice ? 22 : isLargeDevice ? 30 : 28,
         fontFamily: "PressStart2P",
-        color: "#6E59A5",
+        color: Colors.purpura,
       },
       
       filterContainer: {
         flexDirection: "row",
         alignItems: "center",
-        backgroundColor: "#6E59A5",
+        backgroundColor: Colors.purpura,
         paddingVertical: isSmallDevice ? 6 : isMediumDevice ? 7 : 8,
         paddingHorizontal: isSmallDevice ? 8 : isMediumDevice ? 10 : 12,
         gap: 6,
         borderWidth: 2,
-        borderTopColor: "#9B87F5",
-        borderLeftColor: "#9B87F5",
-        borderRightColor: "#4A3D70",
-        borderBottomColor: "#4A3D70",
+        borderTopColor: Colors.purpuraClaro,
+        borderLeftColor: Colors.purpuraClaro,
+        borderRightColor: Colors.purpuraOscuro,
+        borderBottomColor: Colors.purpuraOscuro,
       },
       
       filtrar: {

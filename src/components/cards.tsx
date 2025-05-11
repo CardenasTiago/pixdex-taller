@@ -5,6 +5,7 @@ import { Href, router } from 'expo-router';
 import { TextPressStart2P } from "@/src/components/font";
 import { ROUTES } from '@/src/navegation/routes';
 import { Image } from 'expo-image';
+import {Colors} from "@/src/constants/Colors";
 
 type CardProps = {
   id: number;
@@ -26,7 +27,11 @@ export const Card = ({ id, title, tags, description, imageUrl }: CardProps) => {
       activeOpacity={0.5}
     >
       <View style={styles.imageContainerHorizontal}>
-          <Image source={{uri: imageUrl}} style={styles.image}/>
+          <Image 
+            source={{uri: imageUrl}} 
+            style={styles.image}
+            contentFit="cover" // Corregido: usar contentFit en lugar de resizeMode
+          />
       </View>
       <View style={styles.cardContentContainer}>
         <TextPressStart2P style={styles.cardTitle}>{title}</TextPressStart2P>
@@ -44,32 +49,32 @@ export const Card = ({ id, title, tags, description, imageUrl }: CardProps) => {
 
 const styles = StyleSheet.create({
   CardHorizontal: {
-    width: 170, // Tamaño fijo para Android
+    width: 170, 
     height: '100%',
     marginRight: 15,
-    backgroundColor: '#1F2430',
+    backgroundColor: Colors.fondo,
     borderWidth: 2,
-    borderColor: '#2A2F3B',
+    borderColor: Colors.grisOscuro,
     overflow: 'hidden',
   },
   
   imageContainerHorizontal: {
     width: '100%',
     height: '70%',
-    backgroundColor: '#232323',
+    backgroundColor: Colors.grisOscuro,
   },
   
   cardContentContainer: {
     height: '30%',
     padding: 8,
-    backgroundColor: '#1A1F2C',
+    backgroundColor: Colors.fondo,
     justifyContent: 'space-between',
   },
   
   cardTitle: {
     color: 'white',
     fontFamily: 'PressStart2P',
-    fontSize: 12, // Tamaño fijo para Android
+    fontSize: 12, 
     marginBottom: 8,
   },
   
@@ -79,7 +84,7 @@ const styles = StyleSheet.create({
   },
   
   tagPill: {
-    backgroundColor: '#363636',
+    backgroundColor: Colors.grisOscuro,
     paddingVertical: 3,
     paddingHorizontal: 8,
     borderRadius: 4,
@@ -89,7 +94,8 @@ const styles = StyleSheet.create({
   
   tagText: {
     color: 'white',
-    fontSize: 10, // Tamaño fijo para Android
+    fontSize: 10, 
+    fontWeight: 'bold',
   },
 
   image: {
@@ -97,3 +103,5 @@ const styles = StyleSheet.create({
     height: '100%',
   },
 });
+
+export default Card;
