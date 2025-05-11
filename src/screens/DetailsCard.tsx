@@ -64,7 +64,7 @@ export const DetailsCard = ({ cardId }: DetailsCardProps) => {
             <Text style={styles.description}>{contenido.descripcion}</Text>
 
             {generos.length > 0 && (
-              <View style={styles.section}>
+              <View>
                 <TextPressStart2P style={styles.sectionTitle}>GÉNEROS</TextPressStart2P>
                 <GenreTags genres={generos} />
               </View>
@@ -102,7 +102,6 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: '100%',
     aspectRatio: 2/3,
-    borderRadius: 8,
     overflow: 'hidden',
     marginBottom: 20,
     backgroundColor: Colors.grisOscuro,
@@ -142,13 +141,10 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
   },
-  section: {
-    marginBottom: 20,
-  },
   sectionTitle: {
     color: Colors.verde,
     fontSize: 14,
-    marginBottom: 12,
+    marginBottom: 1,
   },
   description: {
     color: '#E2E8F0',

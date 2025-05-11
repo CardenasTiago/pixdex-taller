@@ -52,7 +52,6 @@ const styles = StyleSheet.create({
   
   navbarContainer: {
     width: '100%',
-    marginBottom: 15,
   },
   
   boxContainer: {

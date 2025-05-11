@@ -2,7 +2,7 @@ import { TouchableOpacity, View, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { TextPressStart2P } from "./font";
 import { Ionicons } from '@expo/vector-icons';
-import {Colors} from "@/src/constants/Colors";
+import { Colors } from "@/src/constants/Colors";
 
 export const BackButton = () => {
   return (
@@ -26,11 +26,15 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   text: {
     color: '#fff',
     fontSize: 16,
     marginLeft: 8,
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+    lineHeight: 16,
   },
 });
 

@@ -1,4 +1,3 @@
-// src/components/CardScroll.tsx
 import React from "react";
 import { View, StyleSheet, FlatList } from "react-native";
 import { Card } from "@/src/components/cards";
@@ -21,7 +20,7 @@ export const CardScroll = ({ tipoId }: CardScrollProps) => {
     <View style={styles.audiovisuales}>
       <View style={styles.categoriaSerieContainer}>
         <View style={styles.categoria}>
-          <TextPressStart2P style={styles.serieText}>{title}</TextPressStart2P>
+          <TextPressStart2P style={styles.categoriaText}>{title}</TextPressStart2P>
         </View>
       </View>
       <View style={styles.borde}>
@@ -71,7 +70,7 @@ const styles = StyleSheet.create({
     padding: 5
   },
 
-  serieText: {
+  categoriaText: {
     color: "white",
     fontSize: 11,
     textAlign: "center",

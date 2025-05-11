@@ -1,4 +1,3 @@
-// src/components/Card.tsx
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Href, router } from 'expo-router';
@@ -6,6 +5,7 @@ import { TextPressStart2P } from "@/src/components/font";
 import { ROUTES } from '@/src/navegation/routes';
 import { Image } from 'expo-image';
 import {Colors} from "@/src/constants/Colors";
+import { GenreTags } from "@/src/components/genreTags";
 
 type CardProps = {
   id: number;
@@ -24,24 +24,17 @@ export const Card = ({ id, title, tags, description, imageUrl }: CardProps) => {
     <TouchableOpacity 
       style={styles.CardHorizontal} 
       onPress={handlePress}
-      activeOpacity={0.5}
     >
       <View style={styles.imageContainerHorizontal}>
           <Image 
             source={{uri: imageUrl}} 
             style={styles.image}
-            contentFit="cover" // Corregido: usar contentFit en lugar de resizeMode
+            contentFit="cover"
           />
       </View>
       <View style={styles.cardContentContainer}>
         <TextPressStart2P style={styles.cardTitle}>{title}</TextPressStart2P>
-        <View style={styles.tagsContainer}>
-          {tags.map((tag, index) => (
-            <View key={index} style={styles.tagPill}>
-              <Text style={styles.tagText}>{tag}</Text>
-            </View>
-          ))}
-        </View>
+        <GenreTags genres={tags} compact/> 
       </View>
     </TouchableOpacity>
   );
@@ -54,7 +47,10 @@ const styles = StyleSheet.create({
     marginRight: 15,
     backgroundColor: Colors.fondo,
     borderWidth: 2,
-    borderColor: Colors.grisOscuro,
+    borderLeftColor: Colors.purpuraOscuro,
+    borderRightColor: Colors.purpuraClaro,
+    borderTopColor: Colors.purpuraOscuro,
+    borderBottomColor: Colors.purpuraClaro,
     overflow: 'hidden',
   },
   
@@ -78,26 +74,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   
-  tagsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  
-  tagPill: {
-    backgroundColor: Colors.grisOscuro,
-    paddingVertical: 3,
-    paddingHorizontal: 8,
-    borderRadius: 4,
-    marginRight: 5,
-    marginBottom: 4,
-  },
-  
-  tagText: {
-    color: 'white',
-    fontSize: 10, 
-    fontWeight: 'bold',
-  },
-
   image: {
     width: '100%',
     height: '100%',
