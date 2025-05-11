@@ -3,8 +3,6 @@ import { Navbar } from "@/src/components/navbar";
 import { GameCard } from "@/src/components/games";
 import { CardScroll } from "@/src/components/cardsScroll";
 import {ROUTES} from "@/src/navegation/routes"
-const { width } = Dimensions.get('window');
-const isXLargeDevice = width >= 1024;
 
 export function HomeScreen() {
   return (
@@ -41,15 +39,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#1A1F2C",
-    paddingTop: Platform.OS === 'ios' ? 50 : 30,
+    paddingTop: 30,
     paddingBottom: 20,
     alignItems: 'center',
   },
   
   mainContent: {
     width: '100%',
-    maxWidth: isXLargeDevice ? 1280 : '100%',
-    paddingHorizontal: isXLargeDevice ? 20 : 12,
+    paddingHorizontal: 12,
   },
   
   navbarContainer: {
@@ -59,14 +56,13 @@ const styles = StyleSheet.create({
   
   boxContainer: {
     flexDirection: "row",
-    flexWrap: isXLargeDevice ? 'wrap' : 'nowrap',
+    flexWrap: 'nowrap',
     justifyContent: "space-between",
     marginBottom: 15,
     width: '100%',
   },
   
   gameBox: {
-    width: isXLargeDevice ? "48.5%" : "48.5%",
-    marginBottom: isXLargeDevice ? 20 : 0,
+    width: "48.5%",
   },
 });

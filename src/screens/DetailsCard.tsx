@@ -1,12 +1,13 @@
 // src/screens/DetailsCard.tsx
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView} from 'react-native';
 import { router } from 'expo-router';
 import { TextPressStart2P } from "@/src/components/font";
 import { contenidosAudiovisuales } from "@/src/data/contenidoAudiovisual";
 import { generosContenidoAudiovisual } from "@/src/data/generosContenidoAudiovisual";
 import { tiposContenidoAudiovisual } from "@/src/data/tiposContenidoAudiovisual";
 import { Ionicons } from '@expo/vector-icons';
+import {Image} from 'expo-image';
 
 type DetailsCardProps = {
     cardId: number;
@@ -104,16 +105,9 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingBottom: 20,
   },
-  errorContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
   errorText: {
     color: '#FF5555',
     fontSize: 16,
-    marginBottom: 20,
     textAlign: 'center',
   },
   header: {
@@ -132,15 +126,11 @@ const styles = StyleSheet.create({
   backContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
   },
   backText: {
     color: '#fff',
     fontSize: 16,
     marginLeft: 8,
-    lineHeight: 16,
-    position: 'relative',
-    top: 1,
   },
   contentContainer: {
     flex: 1,
@@ -174,23 +164,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
     marginBottom: 20,
-    flexWrap: 'wrap',
   },
   title: {
     color: '#9B87F5',
     fontSize: 18,
-    marginRight: 10,
-    flexShrink: 1,
-  },
-  typeBadge: {
-    backgroundColor: '#6E59A5',
-    borderWidth: 2,
-    borderColor: '#9B87F5',
-    paddingVertical: 4,
-    paddingHorizontal: 8,
   },
   typeText: {
     color: 'white',
@@ -220,6 +198,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     marginRight: 8,
     marginBottom: 8,
+    borderRadius: 4,
   },
   genreText: {
     color: 'white',

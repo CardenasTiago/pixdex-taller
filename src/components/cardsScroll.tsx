@@ -1,17 +1,11 @@
 // src/components/CardScroll.tsx
 import React from "react";
-import { View, StyleSheet, FlatList, Dimensions } from "react-native";
+import { View, StyleSheet, FlatList } from "react-native";
 import { Card } from "@/src/components/cards";
 import { contenidosAudiovisuales } from "@/src/data/contenidoAudiovisual";
 import { tiposContenidoAudiovisual } from "@/src/data/tiposContenidoAudiovisual";
 import { generosContenidoAudiovisual } from "@/src/data/generosContenidoAudiovisual";
 import { TextPressStart2P } from "@/src/components/font";
-
-const { width } = Dimensions.get('window');
-const isSmallDevice = width < 375;
-const isMediumDevice = width >= 375 && width < 768;
-const isLargeDevice = width >= 768 && width < 1024;
-const isXLargeDevice = width >= 1024;
 
 type CardScrollProps = {
   tipoId: number;
@@ -70,7 +64,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#6E59A5",
     borderWidth: 2,
     borderColor: "#9B87F5",
-    height: isSmallDevice ? 30 : isMediumDevice ? 32 : 34,
+    height: 32, // Tamaño fijo para Android
     justifyContent: "center",
     alignSelf: 'flex-start',
     padding: 5
@@ -78,7 +72,7 @@ const styles = StyleSheet.create({
 
   serieText: {
     color: "white",
-    fontSize: isSmallDevice ? 10 : isMediumDevice ? 11 : 12,
+    fontSize: 11, // Tamaño fijo para Android
     textAlign: "center",
     paddingVertical: 4,
   },
@@ -86,7 +80,7 @@ const styles = StyleSheet.create({
   borde: {
     borderColor: "#403E43",
     borderWidth: 4,
-    height: isSmallDevice ? 250 : isMediumDevice ? 400 : isLargeDevice ? 500 : 500,
+    height: 400, // Tamaño fijo para Android
     marginHorizontal: 10,
     paddingTop: 20,
   },
