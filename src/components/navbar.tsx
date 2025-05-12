@@ -9,7 +9,7 @@ const isSmallDevice = width < 375;
 const isMediumDevice = width >= 375 && width < 768;
 const isLargeDevice = width >= 768 && width < 1024;
 
-export function Navbar() {  // Nombre del componente con mayúscula
+export function Navbar() {
     return(
         <View style={styles.navbar}>
             <TextPressStart2P style={styles.title}>Pixdex</TextPressStart2P>
@@ -17,7 +17,7 @@ export function Navbar() {  // Nombre del componente con mayúscula
                 <Ionicons name="settings" size={isSmallDevice ? 16 : isMediumDevice ? 18 : 20} color="white" />
                 <TextPressStart2P style={styles.filtrar}>FILTRAR</TextPressStart2P>
             </TouchableOpacity>
-        </View>  // Cierre correcto con </View>
+        </View> 
     );
 }
 
