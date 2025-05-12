@@ -4,20 +4,25 @@ import { Href, router } from 'expo-router';
 import { TextPressStart2P } from "@/src/components/font";
 import { ROUTES } from '@/src/navegation/routes';
 import { Image } from 'expo-image';
-import {Colors} from "@/src/constants/Colors";
+import { Colors } from "@/src/constants/Colors";
 import { GenreTags } from "@/src/components/genreTags";
+import { contenidosAudiovisuales } from '@/src/data/contenidoAudiovisual';
+import { generosContenidoAudiovisual } from '@/src/data/generosContenidoAudiovisual';
 
 type CardProps = {
   id: number;
-  title: string;
-  tags: string[];
-  description: string;  
-  imageUrl: string;
 };
 
-export const Card = ({ id, title, tags, description, imageUrl }: CardProps) => {
+export const Card = ({ id }: CardProps) => {
+  const contenido = contenidosAudiovisuales.find(item => item.id === id);
+  if (!contenido) return null;
+
+  const generos = contenido.generos
+    .map(genId => generosContenidoAudiovisual.find(g => g.id === genId)?.nombre)
+    .filter(Boolean) as string[];
+
   const handlePress = () => {
-    router.push(`${ROUTES.DETAIL}${id.toString()}` as Href);
+    router.push(`${ROUTES.DETAIL}${id}` as Href);
   };
 
   return (
@@ -26,15 +31,15 @@ export const Card = ({ id, title, tags, description, imageUrl }: CardProps) => {
       onPress={handlePress}
     >
       <View style={styles.imageContainerHorizontal}>
-          <Image 
-            source={{uri: imageUrl}} 
-            style={styles.image}
-            contentFit="cover"
-          />
+        <Image 
+          source={{ uri: contenido.imageUrl }} 
+          style={styles.image}
+          contentFit="cover"
+        />
       </View>
       <View style={styles.cardContentContainer}>
-        <TextPressStart2P style={styles.cardTitle}>{title}</TextPressStart2P>
-        <GenreTags genres={tags} compact/> 
+        <TextPressStart2P style={styles.cardTitle}>{contenido.nombre}</TextPressStart2P>
+        <GenreTags genres={generos} compact /> 
       </View>
     </TouchableOpacity>
   );

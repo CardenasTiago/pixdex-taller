@@ -24,25 +24,16 @@ export const CardScroll = ({ tipoId }: CardScrollProps) => {
         </View>
       </View>
       <View style={styles.borde}>
-        <FlatList
+      <FlatList
           horizontal
           data={data}
           renderItem={({ item }) => (
-            <Card 
-              id={item.id}
-              title={item.nombre} 
-              tags={item.generos.map(genId => {
-                const genero = generosContenidoAudiovisual.find(g => g.id === genId);
-                return genero ? genero.nombre : '';
-              }).filter(Boolean)} 
-              description={item.descripcion}
-              imageUrl={item.imageUrl}
-            />
+            <Card id={item.id} />
           )}
           keyExtractor={(item) => `${tipoId}-${item.id}`}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.horizontalScrollContent}
-        />
+      />
       </View>
     </View>
   );
