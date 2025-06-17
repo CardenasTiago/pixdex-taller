@@ -6,14 +6,13 @@ import { Colors } from "@/src/constants/Colors";
 import { tiposContenidoAudiovisual } from "@/src/data/tiposContenidoAudiovisual";
 
 export function HomeScreen() {
-  /** Acción al pulsar FILTRAR (ajústalo a lo que necesites) */
   const handleFilterPress = () => {
     console.log("Abrir modal de filtros");
   };
 
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         {/* NAVBAR con prop onFilterPress */}
         <Navbar onFilterPress={handleFilterPress} />
 
@@ -30,13 +29,11 @@ export function HomeScreen() {
             color="green"
           />
         </View>
-
-        {/* LISTAS DINÁMICAS */}
         {tiposContenidoAudiovisual.map((tipo) => (
           <CardScroll key={tipo.id} tipoId={tipo.id} />
         ))}
-      </SafeAreaView>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 

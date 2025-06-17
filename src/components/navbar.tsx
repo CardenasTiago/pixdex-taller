@@ -3,6 +3,7 @@ import { View, StyleSheet, Dimensions } from "react-native";
 import { TextPressStart2P } from "@/src/components/font";
 import { Colors } from "@/src/constants/Colors";
 import { ActionButton } from "@/src/components/actionButtom";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const { width } = Dimensions.get("window");
 const isSmallDevice = width < 375;
@@ -15,15 +16,17 @@ type Props = {
 
 export function Navbar({ onFilterPress }: Props) {
   return (
-    <View style={styles.navbar}>
-      <TextPressStart2P style={styles.title}>Pixdex</TextPressStart2P>
-      <ActionButton
-        icon="settings"
-        text="FILTRAR"
-        onPress={onFilterPress}
-        size={isSmallDevice ? 16 : isMediumDevice ? 18 : 20}
-      />
-    </View>
+    <SafeAreaView>
+      <View style={styles.navbar}>
+        <TextPressStart2P style={styles.title}>Pixdex</TextPressStart2P>
+        <ActionButton
+          icon="settings"
+          text="FILTRAR"
+          onPress={onFilterPress}
+          size={isSmallDevice ? 16 : isMediumDevice ? 18 : 20}
+        />
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -32,7 +35,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 40,
     paddingHorizontal: 3,
     marginLeft: 15,
     marginRight: 15,
