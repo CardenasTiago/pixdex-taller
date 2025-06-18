@@ -3,6 +3,7 @@ import { TouchableOpacity, View, StyleSheet, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { TextPressStart2P } from "./font";
 import { Colors } from "@/src/constants/Colors";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type Props = {
   icon: keyof typeof Ionicons.glyphMap;
@@ -18,12 +19,15 @@ export const ActionButton = ({
   size = 16,
 }: Props) => {
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress} activeOpacity={0.8}>
-      <View style={styles.content}>
-        <Ionicons name={icon} size={size} color="white" />
-        <TextPressStart2P style={styles.text}>{text}</TextPressStart2P>
-      </View>
-    </TouchableOpacity>
+    <SafeAreaView>
+      <TouchableOpacity style={styles.button} onPress={onPress} activeOpacity={0.8}>
+        <View style={styles.content}>
+          <Ionicons name={icon} size={size} color="white" />
+          <TextPressStart2P style={styles.text}>{text}</TextPressStart2P>
+        </View>
+      </TouchableOpacity>
+    </SafeAreaView>
+
   );
 };
 
@@ -40,6 +44,7 @@ const styles = StyleSheet.create({
     borderLeftColor: Colors.purpuraClaro,
     borderRightColor: Colors.purpuraOscuro,
     borderBottomColor: Colors.purpuraOscuro,
+    alignSelf: 'flex-start',
   },
   content: {
     flexDirection: 'row',

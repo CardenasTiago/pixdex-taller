@@ -5,8 +5,8 @@ import { TextPressStart2P } from "@/src/components/font";
 import { contenidosAudiovisuales } from "@/src/data/contenidoAudiovisual";
 import { tiposContenidoAudiovisual } from "@/src/data/tiposContenidoAudiovisual";
 import { generosContenidoAudiovisual } from "@/src/data/generosContenidoAudiovisual";
-import { ActionButton } from "@/src/components/actionButtom";  // ← Nuevo botón
-import { Label } from "@/src/components/lable";                // ← Ruta correcta
+import { ActionButton } from "@/src/components/actionButtom";
+import { Label } from "@/src/components/lable";                
 import { Image } from "expo-image";
 import { Colors } from "@/src/constants/Colors";
 
