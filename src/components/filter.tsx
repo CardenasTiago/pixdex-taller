@@ -12,6 +12,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/src/constants/Colors";
 import {generosContenidoAudiovisual} from "@/src/data/generosContenidoAudiovisual"; 
 import {tiposContenidoAudiovisual} from "@/src/data/tiposContenidoAudiovisual";
+import { TextPressStart2P } from "./font";
+import { ActionButton } from "./actionButtom";
 type FilterModalProps = {
   visible: boolean;
   onClose: () => void;
@@ -69,14 +71,14 @@ export const FilterModal = ({ visible, onClose, onApply }: FilterModalProps) => 
       <SafeAreaView style={styles.overlay}>
         <View style={styles.modal}>
           <View style={styles.header}>
-            <Text style={styles.title}>Filter Content</Text>
+            <TextPressStart2P style={styles.title}>Filter Content</TextPressStart2P>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Ionicons name="close" size={22} color="white" />
             </TouchableOpacity>
           </View>
 
           <ScrollView style={styles.scroll} contentContainerStyle={{ paddingBottom: 20 }}>
-            <Text style={styles.sectionTitle}>Content Types</Text>
+            <TextPressStart2P style={styles.sectionTitle}>Content Types</TextPressStart2P>
             {tiposContenidoAudiovisual.map((tipo) => (
               <TouchableOpacity
                 key={tipo.id}
@@ -92,7 +94,7 @@ export const FilterModal = ({ visible, onClose, onApply }: FilterModalProps) => 
               </TouchableOpacity>
             ))}
 
-            <Text style={[styles.sectionTitle, { marginTop: 20 }]}>Genres</Text>
+            <TextPressStart2P style={[styles.sectionTitle, { marginTop: 20 }]}>Genres</TextPressStart2P>
             <View style={styles.genresContainer}>
               {generosContenidoAudiovisual.map((genero) => (
                 <TouchableOpacity
@@ -115,11 +117,10 @@ export const FilterModal = ({ visible, onClose, onApply }: FilterModalProps) => 
 
           <View style={styles.footer}>
             <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
-              <Text style={styles.cancelText}>CANCEL</Text>
+              <TextPressStart2P style={styles.cancelText}>CANCEL</TextPressStart2P>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.applyButton} onPress={handleApply}>
-              <Text style={styles.applyText}>APPLY FILTERS</Text>
-            </TouchableOpacity>
+            <ActionButton icon={"filter"} text={"APPY FILTERS"}onPress={handleApply}>
+            </ActionButton>
           </View>
         </View>
       </SafeAreaView>
@@ -137,7 +138,7 @@ const styles = StyleSheet.create({
   modal: {
     width: "85%",
     maxHeight: "80%",
-    backgroundColor: "#111111",
+    backgroundColor: Colors.fondo,
     borderRadius: 8,
     padding: 16,
     borderWidth: 2,
@@ -152,7 +153,7 @@ const styles = StyleSheet.create({
   title: {
     color: "#fff",
     fontFamily: "PressStart2P",
-    fontSize: 14,
+    fontSize: 18,
   },
   closeButton: {
     padding: 6,
@@ -182,14 +183,14 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 3,
     borderWidth: 2,
-    borderColor: "#555",
+    borderColor: Colors.purpura,
     marginRight: 8,
     justifyContent: "center",
     alignItems: "center",
   },
   checkboxChecked: {
-    backgroundColor: "#39FF14",
-    borderColor: "#39FF14",
+    backgroundColor: Colors.purpura,
+    borderColor: Colors.purpura,
   },
   checkboxLabel: {
     color: "white",
@@ -207,7 +208,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     marginTop: 16,
   },
   cancelButton: {
@@ -221,14 +222,6 @@ const styles = StyleSheet.create({
     color: "white",
     fontFamily: "PressStart2P",
     fontSize: 12,
-  },
-  applyButton: {
-    backgroundColor: "#6633FF",
-    borderWidth: 2,
-    borderColor: "#39FF14",
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderRadius: 4,
   },
   applyText: {
     color: "white",
