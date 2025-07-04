@@ -1,3 +1,3 @@
-import { HangmanScreen } from "@/src/screens/HangmanScreen";
+import { HangmanStart } from "@/src/screens/HangmanStart";
 
-export default HangmanScreen;
+export default HangmanStart;

@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   StyleSheet, 
   View, 
   Text, 
   TouchableOpacity, 
-  SafeAreaView 
+  SafeAreaView,
+  Modal,
+  TextInput,
+  Alert,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { TextPressStart2P } from "@/src/components/font";
 import { Colors } from "@/src/constants/Colors";
+import { ActionButton } from '../components/actionButtom';
 
 // Datos del leaderboard
 const topPlayers = [
@@ -20,35 +24,50 @@ const topPlayers = [
   { name: 'AnimeWizard', score: 5 },
 ];
 
-export function HangmanScreen() {
+export function HangmanStart() {
   const router = useRouter();
+  const [showNameModal, setShowNameModal] = useState(false);
+  const [playerName, setPlayerName] = useState('');
 
   const handleBackPress = () => {
     router.back();
   };
 
   const handleStartGame = () => {
-    // Aquí puedes navegar a la pantalla del juego real
-    // router.push('/hangman/game');
-    console.log('Iniciar juego de ahorcado');
+    setShowNameModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowNameModal(false);
+    setPlayerName('');
+  };
+
+  const handleStartWithName = () => {
+    if (playerName.trim()) {
+      setShowNameModal(false);
+      // Aquí puedes navegar a la pantalla del juego real con el nombre del jugador
+      // router.push(`/hangman/game?playerName=${playerName}`);
+      console.log('Iniciar juego con jugador:', playerName);
+    } else {
+      Alert.alert('Error', 'Por favor ingresa tu nombre para continuar');
+    }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header con botón de regreso */}
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
-          <Ionicons name="arrow-back" size={24} color="white" />
-          <TextPressStart2P style={styles.backText}>BACK</TextPressStart2P>
-        </TouchableOpacity>
-      </View>
+      <ActionButton
+        icon="arrow-back"
+        text="BACK"
+        onPress={() => router.back()}
+        size={18}
+      />
 
       {/* Contenido principal */}
       <View style={styles.content}>
         {/* Título del juego */}
         <View style={styles.titleContainer}>
           <TextPressStart2P style={styles.gameTitle}>
-            Hangman{'\n'}Challenge
+            Hangman Challenge
           </TextPressStart2P>
         </View>
 
@@ -82,6 +101,46 @@ export function HangmanScreen() {
           </View>
         </View>
       </View>
+
+      {/* Modal para ingresar nombre */}
+      <Modal
+        visible={showNameModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={handleCloseModal}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            {/* Botón de cerrar */}
+            <TouchableOpacity style={styles.closeButton} onPress={handleCloseModal}>
+              <Ionicons name="close" size={24} color="white" />
+            </TouchableOpacity>
+            
+            {/* Título del modal */}
+            <TextPressStart2P style={styles.modalTitle}>
+              Enter Your Name
+            </TextPressStart2P>
+            
+            {/* Campo de texto */}
+            <TextInput
+              style={styles.nameInput}
+              placeholder="Nombre del jugador"
+              placeholderTextColor="#999"
+              value={playerName}
+              onChangeText={setPlayerName}
+              maxLength={20}
+              autoFocus={true}
+            />
+            
+            {/* Botón de inicio */}
+            <TouchableOpacity style={styles.modalStartButton} onPress={handleStartWithName}>
+              <TextPressStart2P style={styles.modalStartText}>
+                START GAME
+              </TextPressStart2P>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -182,5 +241,57 @@ const styles = StyleSheet.create({
     color: Colors.verde,
     fontSize: 14,
     fontWeight: 'bold',
+  },
+
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: Colors.fondo,
+    borderWidth: 3,
+    borderColor: Colors.purpura,
+    borderRadius: 10,
+    padding: 30,
+    width: '85%',
+    maxWidth: 400,
+    position: 'relative',
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 15,
+    right: 15,
+    zIndex: 1,
+  },
+  modalTitle: {
+    color: 'white',
+    fontSize: 18,
+    textAlign: 'center',
+    marginBottom: 30,
+    marginTop: 10,
+  },
+  nameInput: {
+    backgroundColor: 'transparent',
+    borderWidth: 2,
+    borderColor: Colors.purpura,
+    color: 'white',
+    fontSize: 16,
+    padding: 15,
+    marginBottom: 30,
+    borderRadius: 5,
+  },
+  modalStartButton: {
+    backgroundColor: Colors.purpura,
+    borderWidth: 3,
+    borderColor: Colors.purpuraOscuro,
+    paddingVertical: 15,
+    paddingHorizontal: 25,
+    alignSelf: 'center',
+  },
+  modalStartText: {
+    color: 'white',
+    fontSize: 14,
   },
 });
