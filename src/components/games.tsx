@@ -1,6 +1,8 @@
-import { Text, View, StyleSheet, Platform } from 'react-native';
+import { Text, View, StyleSheet, Platform, TouchableOpacity } from 'react-native';
 import {TextPressStart2P} from "@/src/components/font";
 import {Colors} from "@/src/constants/Colors";
+import { useRouter } from 'expo-router';
+import { ROUTES } from '../navegation/routes';
 
 interface Props {
   title: string;
@@ -11,10 +13,20 @@ interface Props {
 const padding = Platform.OS === 'ios' ? 14 : 12;
 
 export const GameCard = ({ title, description, color }: Props) => {
+  const router = useRouter();
   const boxStyle = color === 'purple' ? styles.purpleBox : styles.greenBox;
 
+  const handlePress = () => {
+    if (title === "Desafío del Ahorcado") {
+      router.push(ROUTES.HANGMAN);
+    } else {
+      // Aquí puedes agregar navegación para otros juegos
+      console.log(`Navigating to ${title}`);
+    }
+  };
+
   return (
-    <View style={styles.gameBox}>
+    <TouchableOpacity style={styles.gameBox} onPress={handlePress}>
       <View style={boxStyle}>
         <View style={styles.contentContainer}>
           <TextPressStart2P style={styles.gameTitle}>{title}</TextPressStart2P>
@@ -24,7 +36,7 @@ export const GameCard = ({ title, description, color }: Props) => {
           <TextPressStart2P style={styles.playText}>Jugar</TextPressStart2P>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

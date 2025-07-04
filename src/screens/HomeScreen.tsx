@@ -33,7 +33,6 @@ export function HomeScreen() {
     tipo => activeFilters.contentTypes[tipo.id]
   );
 
-  // Función para filtrar los contenidos según los géneros seleccionados
   const filterByGenres = (items: typeof contenidosAudiovisuales) => {
     const selectedGenres = Object.entries(activeFilters.genres)
       .filter(([_, selected]) => selected)
