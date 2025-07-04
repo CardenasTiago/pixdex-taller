@@ -10,14 +10,16 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/src/constants/Colors";
-import {generosContenidoAudiovisual} from "@/src/data/generosContenidoAudiovisual"; 
-import {tiposContenidoAudiovisual} from "@/src/data/tiposContenidoAudiovisual";
+import { generosContenidoAudiovisual } from "@/src/data/generosContenidoAudiovisual";
+import { tiposContenidoAudiovisual } from "@/src/data/tiposContenidoAudiovisual";
 import { TextPressStart2P } from "./font";
 import { ActionButton } from "./actionButtom";
+
 type FilterModalProps = {
   visible: boolean;
   onClose: () => void;
   onApply: (filters: FiltersState) => void;
+  initialFilters?: FiltersState;
 };
 
 type FiltersState = {
@@ -29,8 +31,13 @@ type FiltersState = {
   };
 };
 
-export const FilterModal = ({ visible, onClose, onApply }: FilterModalProps) => {
-  const [filters, setFilters] = useState<FiltersState>({
+export const FilterModal = ({ 
+  visible, 
+  onClose, 
+  onApply,
+  initialFilters 
+}: FilterModalProps) => {
+  const [filters, setFilters] = useState<FiltersState>(initialFilters || {
     contentTypes: tiposContenidoAudiovisual.reduce((acc, tipo) => {
       acc[tipo.id] = true;
       return acc;
@@ -61,6 +68,19 @@ export const FilterModal = ({ visible, onClose, onApply }: FilterModalProps) => 
     }));
   };
 
+  const handleReset = () => {
+    setFilters({
+      contentTypes: tiposContenidoAudiovisual.reduce((acc, tipo) => {
+        acc[tipo.id] = true;
+        return acc;
+      }, {} as FiltersState["contentTypes"]),
+      genres: generosContenidoAudiovisual.reduce((acc, genero) => {
+        acc[genero.id] = false;
+        return acc;
+      }, {} as FiltersState["genres"]),
+    });
+  };
+
   const handleApply = () => {
     onApply(filters);
     onClose();
@@ -71,14 +91,29 @@ export const FilterModal = ({ visible, onClose, onApply }: FilterModalProps) => 
       <SafeAreaView style={styles.overlay}>
         <View style={styles.modal}>
           <View style={styles.header}>
-            <TextPressStart2P style={styles.title}>Filter Content</TextPressStart2P>
+            <TextPressStart2P style={styles.title}>FILTER CONTENT</TextPressStart2P>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Ionicons name="close" size={22} color="white" />
             </TouchableOpacity>
           </View>
 
           <ScrollView style={styles.scroll} contentContainerStyle={{ paddingBottom: 20 }}>
-            <TextPressStart2P style={styles.sectionTitle}>Content Types</TextPressStart2P>
+            <View style={styles.sectionHeader}>
+              <TextPressStart2P style={styles.sectionTitle}>CONTENT TYPES</TextPressStart2P>
+              <TouchableOpacity onPress={() => {
+                const allSelected = Object.values(filters.contentTypes).every(v => v);
+                const newContentTypes = {...filters.contentTypes};
+                tiposContenidoAudiovisual.forEach(tipo => {
+                  newContentTypes[tipo.id] = !allSelected;
+                });
+                setFilters({...filters, contentTypes: newContentTypes});
+              }}>
+                <TextPressStart2P style={styles.selectAllText}>
+                  {Object.values(filters.contentTypes).every(v => v) ? 'DESELECT ALL' : 'SELECT ALL'}
+                </TextPressStart2P>
+              </TouchableOpacity>
+            </View>
+            
             {tiposContenidoAudiovisual.map((tipo) => (
               <TouchableOpacity
                 key={tipo.id}
@@ -94,7 +129,22 @@ export const FilterModal = ({ visible, onClose, onApply }: FilterModalProps) => 
               </TouchableOpacity>
             ))}
 
-            <TextPressStart2P style={[styles.sectionTitle, { marginTop: 20 }]}>Genres</TextPressStart2P>
+            <View style={[styles.sectionHeader, { marginTop: 20 }]}>
+              <TextPressStart2P style={styles.sectionTitle}>GENRES</TextPressStart2P>
+              <TouchableOpacity onPress={() => {
+                const allSelected = Object.values(filters.genres).every(v => v);
+                const newGenres = {...filters.genres};
+                generosContenidoAudiovisual.forEach(genero => {
+                  newGenres[genero.id] = !allSelected;
+                });
+                setFilters({...filters, genres: newGenres});
+              }}>
+                <TextPressStart2P style={styles.selectAllText}>
+                  {Object.values(filters.genres).every(v => v) ? 'DESELECT ALL' : 'SELECT ALL'}
+                </TextPressStart2P>
+              </TouchableOpacity>
+            </View>
+            
             <View style={styles.genresContainer}>
               {generosContenidoAudiovisual.map((genero) => (
                 <TouchableOpacity
@@ -116,11 +166,15 @@ export const FilterModal = ({ visible, onClose, onApply }: FilterModalProps) => 
           </ScrollView>
 
           <View style={styles.footer}>
-            <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
-              <TextPressStart2P style={styles.cancelText}>CANCEL</TextPressStart2P>
+            <TouchableOpacity style={styles.resetButton} onPress={handleReset}>
+              <TextPressStart2P style={styles.resetText}>RESET</TextPressStart2P>
             </TouchableOpacity>
-            <ActionButton icon={"filter"} text={"APPY FILTERS"}onPress={handleApply}>
-            </ActionButton>
+            <View style={styles.footerRight}>
+              <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
+                <TextPressStart2P style={styles.cancelText}>CANCEL</TextPressStart2P>
+              </TouchableOpacity>
+              <ActionButton icon={"filter"} text={"APPLY FILTERS"} onPress={handleApply} />
+            </View>
           </View>
         </View>
       </SafeAreaView>
@@ -149,10 +203,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.purpura,
+    paddingBottom: 8,
   },
   title: {
     color: "#fff",
-    fontFamily: "PressStart2P",
     fontSize: 18,
   },
   closeButton: {
@@ -161,22 +217,32 @@ const styles = StyleSheet.create({
   scroll: {
     flexGrow: 0,
   },
+  sectionHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 12,
+  },
   sectionTitle: {
     color: "#39FF14",
-    fontFamily: "PressStart2P",
     fontSize: 12,
-    marginBottom: 8,
+  },
+  selectAllText: {
+    color: Colors.purpuraClaro,
+    fontSize: 10,
   },
   checkboxRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 6,
+    marginBottom: 10,
+    paddingVertical: 4,
   },
   checkboxRowSmall: {
     flexDirection: "row",
     alignItems: "center",
     width: "50%",
-    marginBottom: 6,
+    marginBottom: 8,
+    paddingVertical: 2,
   },
   checkbox: {
     width: 20,
@@ -194,12 +260,10 @@ const styles = StyleSheet.create({
   },
   checkboxLabel: {
     color: "white",
-    fontFamily: "PressStart2P",
     fontSize: 12,
   },
   checkboxLabelSmall: {
     color: "white",
-    fontFamily: "PressStart2P",
     fontSize: 11,
   },
   genresContainer: {
@@ -208,8 +272,25 @@ const styles = StyleSheet.create({
   },
   footer: {
     flexDirection: "row",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: Colors.purpura,
+    paddingTop: 12,
+  },
+  footerRight: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  resetButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+  },
+  resetText: {
+    color: Colors.purpuraClaro,
+    fontSize: 10,
+    textDecorationLine: 'underline',
   },
   cancelButton: {
     borderWidth: 2,
@@ -217,15 +298,10 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 4,
+    marginRight: 12,
   },
   cancelText: {
     color: "white",
-    fontFamily: "PressStart2P",
-    fontSize: 12,
-  },
-  applyText: {
-    color: "white",
-    fontFamily: "PressStart2P",
     fontSize: 12,
   },
 });

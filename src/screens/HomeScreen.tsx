@@ -1,4 +1,4 @@
-import { StyleSheet, ScrollView, View, SafeAreaView, Modal, Pressable, Text} from "react-native";
+import { StyleSheet, ScrollView, View, SafeAreaView } from "react-native";
 import { Navbar } from "@/src/components/navbar";       
 import { GameCard } from "@/src/components/games";
 import { CardScroll } from "@/src/components/cardsScroll";
@@ -6,26 +6,57 @@ import { Colors } from "@/src/constants/Colors";
 import { tiposContenidoAudiovisual } from "@/src/data/tiposContenidoAudiovisual";
 import React, { useState } from "react";
 import { FilterModal } from "../components/filter";
+import { contenidosAudiovisuales } from "@/src/data/contenidoAudiovisual";
+import { generosContenidoAudiovisual } from "@/src/data/generosContenidoAudiovisual";
 
 export function HomeScreen() {
-
-
   const [filterVisible, setFilterVisible] = useState(false);
+  const [activeFilters, setActiveFilters] = useState({
+    contentTypes: tiposContenidoAudiovisual.reduce((acc, tipo) => {
+      acc[tipo.id] = true;
+      return acc;
+    }, {} as Record<number, boolean>),
+    genres: generosContenidoAudiovisual.reduce((acc, genero) => {
+      acc[genero.id] = false;
+      return acc;
+    }, {} as Record<number, boolean>),
+  });
 
-  const handleApplyFilters = (filters: any) => {
-    console.log("Filtros aplicados:", filters);
+  const handleApplyFilters = (filters: {
+    contentTypes: Record<number, boolean>;
+    genres: Record<number, boolean>;
+  }) => {
+    setActiveFilters(filters);
+  };
+
+  const filteredContentTypes = tiposContenidoAudiovisual.filter(
+    tipo => activeFilters.contentTypes[tipo.id]
+  );
+
+  // Función para filtrar los contenidos según los géneros seleccionados
+  const filterByGenres = (items: typeof contenidosAudiovisuales) => {
+    const selectedGenres = Object.entries(activeFilters.genres)
+      .filter(([_, selected]) => selected)
+      .map(([id]) => parseInt(id));
+
+    if (selectedGenres.length === 0) return items;
+
+    return items.filter(item => 
+      item.generos.some(genreId => selectedGenres.includes(genreId))
+    );
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        {/* NAVBAR con prop onFilterPress */}
         <Navbar onFilterPress={() => setFilterVisible(true)} />
-      <FilterModal
-        visible={filterVisible}
-        onClose={() => setFilterVisible(false)}
-        onApply={handleApplyFilters}
-      />
+        
+        <FilterModal
+          visible={filterVisible}
+          onClose={() => setFilterVisible(false)}
+          onApply={handleApplyFilters}
+          initialFilters={activeFilters}
+        />
 
         {/* JUEGOS */}
         <View style={styles.gamesRow}>
@@ -40,8 +71,14 @@ export function HomeScreen() {
             color="green"
           />
         </View>
-        {tiposContenidoAudiovisual.map((tipo) => (
-          <CardScroll key={tipo.id} tipoId={tipo.id} />
+
+        {/* Mostrar solo los tipos de contenido seleccionados */}
+        {filteredContentTypes.map((tipo) => (
+          <CardScroll 
+            key={tipo.id} 
+            tipoId={tipo.id} 
+            filterFunction={filterByGenres}
+          />
         ))}
       </ScrollView>
     </SafeAreaView>
@@ -59,31 +96,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 15,
-  },
-
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.4)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalContent: {
-    width: "80%",
-    backgroundColor: Colors.grisOscuro,
-    borderRadius: 12,
-    padding: 20,
-    alignItems: "center",
-  },
-  modalTitle: {
-    fontSize: 18,
-    color: Colors.purpuraClaro,
-    marginBottom: 12,
-  },
-  closeButton: {
-    marginTop: 20,
-    backgroundColor: Colors.purpura,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 8,
   },
 });
