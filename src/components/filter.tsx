@@ -68,19 +68,6 @@ export const FilterModal = ({
     }));
   };
 
-  const handleReset = () => {
-    setFilters({
-      contentTypes: tiposContenidoAudiovisual.reduce((acc, tipo) => {
-        acc[tipo.id] = true;
-        return acc;
-      }, {} as FiltersState["contentTypes"]),
-      genres: generosContenidoAudiovisual.reduce((acc, genero) => {
-        acc[genero.id] = false;
-        return acc;
-      }, {} as FiltersState["genres"]),
-    });
-  };
-
   const handleApply = () => {
     onApply(filters);
     onClose();
@@ -100,18 +87,6 @@ export const FilterModal = ({
           <ScrollView style={styles.scroll} contentContainerStyle={{ paddingBottom: 20 }}>
             <View style={styles.sectionHeader}>
               <TextPressStart2P style={styles.sectionTitle}>CONTENT TYPES</TextPressStart2P>
-              <TouchableOpacity onPress={() => {
-                const allSelected = Object.values(filters.contentTypes).every(v => v);
-                const newContentTypes = {...filters.contentTypes};
-                tiposContenidoAudiovisual.forEach(tipo => {
-                  newContentTypes[tipo.id] = !allSelected;
-                });
-                setFilters({...filters, contentTypes: newContentTypes});
-              }}>
-                <TextPressStart2P style={styles.selectAllText}>
-                  {Object.values(filters.contentTypes).every(v => v) ? 'DESELECT ALL' : 'SELECT ALL'}
-                </TextPressStart2P>
-              </TouchableOpacity>
             </View>
             
             {tiposContenidoAudiovisual.map((tipo) => (
@@ -131,18 +106,6 @@ export const FilterModal = ({
 
             <View style={[styles.sectionHeader, { marginTop: 20 }]}>
               <TextPressStart2P style={styles.sectionTitle}>GENRES</TextPressStart2P>
-              <TouchableOpacity onPress={() => {
-                const allSelected = Object.values(filters.genres).every(v => v);
-                const newGenres = {...filters.genres};
-                generosContenidoAudiovisual.forEach(genero => {
-                  newGenres[genero.id] = !allSelected;
-                });
-                setFilters({...filters, genres: newGenres});
-              }}>
-                <TextPressStart2P style={styles.selectAllText}>
-                  {Object.values(filters.genres).every(v => v) ? 'DESELECT ALL' : 'SELECT ALL'}
-                </TextPressStart2P>
-              </TouchableOpacity>
             </View>
             
             <View style={styles.genresContainer}>
@@ -165,16 +128,11 @@ export const FilterModal = ({
             </View>
           </ScrollView>
 
-          <View style={styles.footer}>
-            <TouchableOpacity style={styles.resetButton} onPress={handleReset}>
-              <TextPressStart2P style={styles.resetText}>RESET</TextPressStart2P>
+          <View style={styles.footerRight}>
+            <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
+              <TextPressStart2P style={styles.cancelText}>CANCEL</TextPressStart2P>
             </TouchableOpacity>
-            <View style={styles.footerRight}>
-              <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
-                <TextPressStart2P style={styles.cancelText}>CANCEL</TextPressStart2P>
-              </TouchableOpacity>
-              <ActionButton icon={"filter"} text={"APPLY FILTERS"} onPress={handleApply} />
-            </View>
+            <ActionButton icon={"filter"} text={"APPLY FILTERS"} onPress={handleApply} />
           </View>
         </View>
       </SafeAreaView>
@@ -270,18 +228,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
   },
-  footer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 16,
-    borderTopWidth: 1,
-    borderTopColor: Colors.purpura,
-    paddingTop: 12,
-  },
   footerRight: {
     flexDirection: "row",
     alignItems: "center",
+    marginRight: 5,
   },
   resetButton: {
     paddingVertical: 8,
