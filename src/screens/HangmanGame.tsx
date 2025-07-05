@@ -1,0 +1,447 @@
+import React, { useState, useEffect } from 'react';
+import { 
+  StyleSheet, 
+  View, 
+  Text, 
+  TouchableOpacity, 
+  SafeAreaView,
+  Modal,
+  TextInput,
+  Alert,
+  Image 
+} from 'react-native';
+import { useRouter, useLocalSearchParams } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { TextPressStart2P } from "@/src/components/font";
+import { Colors } from "@/src/constants/Colors";
+
+// Datos de ejemplo de contenido audiovisual
+const contenidoEjemplo = [
+  { id: 1, titulo: 'One Piece', imagen: 'https://via.placeholder.com/400x300/999/fff?text=OnePiece' },
+  { id: 2, titulo: 'Breaking Bad', imagen: 'https://via.placeholder.com/400x300/999/fff?text=BreakingBad' },
+  { id: 3, titulo: 'Naruto', imagen: 'https://via.placeholder.com/400x300/999/fff?text=Naruto' },
+  { id: 4, titulo: 'Game of Thrones', imagen: 'https://via.placeholder.com/400x300/999/fff?text=GameOfThrones' },
+  { id: 5, titulo: 'Attack on Titan', imagen: 'https://via.placeholder.com/400x300/999/fff?text=AttackOnTitan' },
+];
+
+const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
+export function HangmanGame() {
+  const router = useRouter();
+  const { playerName } = useLocalSearchParams();
+  
+  // Estados del juego
+  const [lives, setLives] = useState(5);
+  const [score, setScore] = useState(0);
+  const [currentContent, setCurrentContent] = useState(contenidoEjemplo[0]);
+  const [guessedLetters, setGuessedLetters] = useState<string[]>([]);
+  const [showTitleModal, setShowTitleModal] = useState(false);
+  const [showLetterModal, setShowLetterModal] = useState(false);
+  const [titleGuess, setTitleGuess] = useState('');
+  const [gameOver, setGameOver] = useState(false);
+  const [currentContentIndex, setCurrentContentIndex] = useState(0);
+
+  // Función para obtener el título con letras adivinadas
+  const getDisplayTitle = () => {
+    return currentContent.titulo
+      .split('')
+      .map(char => {
+        if (char === ' ') return ' ';
+        if (guessedLetters.includes(char.toUpperCase())) return char;
+        return '_';
+      })
+      .join(' ');
+  };
+
+  // Función para verificar si el título está completamente adivinado
+  const isTitleCompleted = () => {
+    return currentContent.titulo
+      .split('')
+      .every(char => char === ' ' || guessedLetters.includes(char.toUpperCase()));
+  };
+
+  // Función para pasar al siguiente contenido
+  const nextContent = () => {
+    if (currentContentIndex < contenidoEjemplo.length - 1) {
+      setCurrentContentIndex(currentContentIndex + 1);
+      setCurrentContent(contenidoEjemplo[currentContentIndex + 1]);
+      setGuessedLetters([]);
+      setScore(score + 1);
+    } else {
+      // Fin del juego - todos los contenidos completados
+      Alert.alert('¡Felicitaciones!', 'Has completado todos los títulos!', [
+        { text: 'OK', onPress: () => router.back() }
+      ]);
+    }
+  };
+
+  // Función para manejar game over
+  const handleGameOver = () => {
+    setGameOver(true);
+    Alert.alert('Game Over', `Tu puntuación final: ${score}`, [
+      { text: 'OK', onPress: () => router.back() }
+    ]);
+  };
+
+  // Función para manejar la adivinanza del título completo
+  const handleTitleGuess = () => {
+    if (titleGuess.trim().toLowerCase() === currentContent.titulo.toLowerCase()) {
+      setShowTitleModal(false);
+      setTitleGuess('');
+      nextContent();
+    } else {
+      setLives(lives - 1);
+      setShowTitleModal(false);
+      setTitleGuess('');
+      if (lives - 1 <= 0) {
+        handleGameOver();
+      }
+    }
+  };
+
+  // Función para manejar la adivinanza de una letra
+  const handleLetterGuess = (letter: string) => {
+    if (!guessedLetters.includes(letter)) {
+      const newGuessedLetters = [...guessedLetters, letter];
+      setGuessedLetters(newGuessedLetters);
+      
+      if (!currentContent.titulo.toUpperCase().includes(letter)) {
+        setLives(lives - 1);
+        if (lives - 1 <= 0) {
+          setShowLetterModal(false);
+          handleGameOver();
+          return;
+        }
+      }
+    }
+    setShowLetterModal(false);
+  };
+
+  // Verificar si el título está completado después de cada letra
+  useEffect(() => {
+    if (isTitleCompleted() && guessedLetters.length > 0) {
+      setTimeout(() => {
+        nextContent();
+      }, 1000);
+    }
+  }, [guessedLetters]);
+
+  const renderHearts = () => {
+    return Array.from({ length: 5 }, (_, index) => (
+      <Ionicons 
+        key={index} 
+        name="heart" 
+        size={24} 
+        color={index < lives ? Colors.purpura : '#444'} 
+      />
+    ));
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.exitButton} onPress={() => router.back()}>
+          <Ionicons name="arrow-back" size={20} color="white" />
+          <TextPressStart2P style={styles.exitText}>EXIT</TextPressStart2P>
+        </TouchableOpacity>
+        
+        <View style={styles.heartsContainer}>
+          {renderHearts()}
+        </View>
+        
+        <View style={styles.scoreContainer}>
+          <Text style={styles.playerText}>Player: {playerName}</Text>
+          <Text style={styles.scoreText}>Score: {score}</Text>
+        </View>
+      </View>
+
+      {/* Botones de juego */}
+      <View style={styles.gameButtonsContainer}>
+        <TouchableOpacity 
+          style={styles.gameButton} 
+          onPress={() => setShowTitleModal(true)}
+        >
+          <TextPressStart2P style={styles.gameButtonText}>
+            GUESS TITLE
+          </TextPressStart2P>
+        </TouchableOpacity>
+        
+        <TouchableOpacity 
+          style={styles.gameButton} 
+          onPress={() => setShowLetterModal(true)}
+        >
+          <TextPressStart2P style={styles.gameButtonText}>
+            GUESS LETTER
+          </TextPressStart2P>
+        </TouchableOpacity>
+      </View>
+
+      {/* Área de contenido */}
+      <View style={styles.contentArea}>
+        <Image source={{ uri: currentContent.imagen }} style={styles.contentImage} />
+      </View>
+
+      {/* Área de título con guiones */}
+      <View style={styles.titleArea}>
+        <TextPressStart2P style={styles.titleDisplay}>
+          {getDisplayTitle()}
+        </TextPressStart2P>
+      </View>
+
+      {/* Modal para adivinar título */}
+      <Modal
+        visible={showTitleModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowTitleModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <TouchableOpacity 
+              style={styles.closeButton} 
+              onPress={() => setShowTitleModal(false)}
+            >
+              <Ionicons name="close" size={24} color="white" />
+            </TouchableOpacity>
+            
+            <TextPressStart2P style={styles.modalTitle}>
+              Guess the Title
+            </TextPressStart2P>
+            
+            <TextInput
+              style={styles.titleInput}
+              placeholder="Enter complete title"
+              placeholderTextColor="#999"
+              value={titleGuess}
+              onChangeText={setTitleGuess}
+              autoFocus={true}
+            />
+            
+            <TouchableOpacity 
+              style={styles.submitButton} 
+              onPress={handleTitleGuess}
+            >
+              <TextPressStart2P style={styles.submitButtonText}>
+                SUBMIT GUESS
+              </TextPressStart2P>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Modal para adivinar letra */}
+      <Modal
+        visible={showLetterModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowLetterModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <TouchableOpacity 
+              style={styles.closeButton} 
+              onPress={() => setShowLetterModal(false)}
+            >
+              <Ionicons name="close" size={24} color="white" />
+            </TouchableOpacity>
+            
+            <TextPressStart2P style={styles.modalTitle}>
+              Guess a Letter
+            </TextPressStart2P>
+            
+            <View style={styles.alphabetGrid}>
+              {alphabet.map((letter) => (
+                <TouchableOpacity
+                  key={letter}
+                  style={[
+                    styles.letterButton,
+                    guessedLetters.includes(letter) && styles.letterButtonDisabled
+                  ]}
+                  onPress={() => handleLetterGuess(letter)}
+                  disabled={guessedLetters.includes(letter)}
+                >
+                  <TextPressStart2P style={[
+                    styles.letterButtonText,
+                    guessedLetters.includes(letter) && styles.letterButtonTextDisabled
+                  ]}>
+                    {letter}
+                  </TextPressStart2P>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        </View>
+      </Modal>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.fondo,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 10,
+  },
+  exitButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.purpura,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderWidth: 2,
+    borderColor: Colors.purpuraOscuro,
+    flex: 1,
+    maxWidth: 100,
+  },
+  exitText: {
+    color: 'white',
+    fontSize: 10,
+    marginLeft: 5,
+  },
+  heartsContainer: {
+    flexDirection: 'row',
+    gap: 5,
+  },
+  scoreContainer: {
+    alignItems: 'flex-end',
+    flex: 1,
+  },
+  playerText: {
+    color: 'white',
+    fontSize: 10,
+  },
+  scoreText: {
+    color: 'white',
+    fontSize: 10,
+  },
+  gameButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+  },
+  gameButton: {
+    backgroundColor: Colors.purpura,
+    borderWidth: 3,
+    borderColor: Colors.purpuraOscuro,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+  },
+  gameButtonText: {
+    color: 'white',
+    fontSize: 12,
+  },
+  contentArea: {
+    flex: 1,
+    margin: 20,
+    backgroundColor: '#ccc',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  contentImage: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 10,
+  },
+  titleArea: {
+    backgroundColor: Colors.grisOscuro,
+    marginHorizontal: 20,
+    marginBottom: 20,
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  titleDisplay: {
+    color: 'white',
+    fontSize: 18,
+    textAlign: 'center',
+  },
+  // Estilos de modales
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: Colors.fondo,
+    borderWidth: 3,
+    borderColor: Colors.purpura,
+    borderRadius: 10,
+    padding: 30,
+    width: '85%',
+    maxWidth: 400,
+    position: 'relative',
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 15,
+    right: 15,
+    zIndex: 1,
+  },
+  modalTitle: {
+    color: 'white',
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 20,
+    marginTop: 10,
+  },
+  titleInput: {
+    backgroundColor: 'transparent',
+    borderWidth: 2,
+    borderColor: Colors.purpura,
+    color: 'white',
+    fontSize: 16,
+    padding: 15,
+    marginBottom: 20,
+    borderRadius: 5,
+  },
+  submitButton: {
+    backgroundColor: Colors.purpura,
+    borderWidth: 3,
+    borderColor: Colors.purpuraOscuro,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    alignSelf: 'center',
+  },
+  submitButtonText: {
+    color: 'white',
+    fontSize: 12,
+  },
+  alphabetGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: 8,
+  },
+  letterButton: {
+    backgroundColor: Colors.purpura,
+    borderWidth: 2,
+    borderColor: Colors.purpuraOscuro,
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+  },
+  letterButtonDisabled: {
+    backgroundColor: '#444',
+    borderColor: '#666',
+  },
+  letterButtonText: {
+    color: 'white',
+    fontSize: 12,
+  },
+  letterButtonTextDisabled: {
+    color: '#999',
+  },
+});

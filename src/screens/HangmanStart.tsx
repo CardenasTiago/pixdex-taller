@@ -7,13 +7,13 @@ import {
   SafeAreaView,
   Modal,
   TextInput,
-  Alert,
+  Alert 
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { TextPressStart2P } from "@/src/components/font";
 import { Colors } from "@/src/constants/Colors";
-import { ActionButton } from '../components/actionButtom';
+import { ROUTES } from '../navegation/routes';
 
 // Datos del leaderboard
 const topPlayers = [
@@ -45,9 +45,8 @@ export function HangmanStart() {
   const handleStartWithName = () => {
     if (playerName.trim()) {
       setShowNameModal(false);
-      // Aquí puedes navegar a la pantalla del juego real con el nombre del jugador
-      // router.push(`/hangman/game?playerName=${playerName}`);
-      console.log('Iniciar juego con jugador:', playerName);
+      // Navegar a la pantalla del juego con el nombre del jugador
+      router.push(ROUTES.HANGMANGAME);
     } else {
       Alert.alert('Error', 'Por favor ingresa tu nombre para continuar');
     }
@@ -55,19 +54,20 @@ export function HangmanStart() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ActionButton
-        icon="arrow-back"
-        text="BACK"
-        onPress={() => router.back()}
-        size={18}
-      />
+      {/* Header con botón de regreso */}
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
+          <Ionicons name="arrow-back" size={24} color="white" />
+          <TextPressStart2P style={styles.backText}>BACK</TextPressStart2P>
+        </TouchableOpacity>
+      </View>
 
       {/* Contenido principal */}
       <View style={styles.content}>
         {/* Título del juego */}
         <View style={styles.titleContainer}>
           <TextPressStart2P style={styles.gameTitle}>
-            Hangman Challenge
+            Hangman{'\n'}Challenge
           </TextPressStart2P>
         </View>
 
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
   },
-
+  // Estilos del modal
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.8)',
