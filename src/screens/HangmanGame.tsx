@@ -10,40 +10,38 @@ import {
   Alert,
   Image 
 } from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { TextPressStart2P } from "@/src/components/font";
 import { Colors } from "@/src/constants/Colors";
-
-// Datos de ejemplo de contenido audiovisual
-const contenidoEjemplo = [
-  { id: 1, titulo: 'One Piece', imagen: 'https://via.placeholder.com/400x300/999/fff?text=OnePiece' },
-  { id: 2, titulo: 'Breaking Bad', imagen: 'https://via.placeholder.com/400x300/999/fff?text=BreakingBad' },
-  { id: 3, titulo: 'Naruto', imagen: 'https://via.placeholder.com/400x300/999/fff?text=Naruto' },
-  { id: 4, titulo: 'Game of Thrones', imagen: 'https://via.placeholder.com/400x300/999/fff?text=GameOfThrones' },
-  { id: 5, titulo: 'Attack on Titan', imagen: 'https://via.placeholder.com/400x300/999/fff?text=AttackOnTitan' },
-];
+import { useHangman } from '../context/hangmanContext';
+import { ROUTES } from '../navegation/routes';
 
 const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
 export function HangmanGame() {
   const router = useRouter();
-  const { playerName } = useLocalSearchParams();
+  const {
+    playerName,
+    lives,
+    setLives,
+    score,
+    currentContent,
+    guessedLetters,
+    setGuessedLetters,
+    addTopPlayer,
+    resetGame,
+    nextContent,
+    setGameOver
+  } = useHangman();
   
-  // Estados del juego
-  const [lives, setLives] = useState(5);
-  const [score, setScore] = useState(0);
-  const [currentContent, setCurrentContent] = useState(contenidoEjemplo[0]);
-  const [guessedLetters, setGuessedLetters] = useState<string[]>([]);
   const [showTitleModal, setShowTitleModal] = useState(false);
   const [showLetterModal, setShowLetterModal] = useState(false);
   const [titleGuess, setTitleGuess] = useState('');
-  const [gameOver, setGameOver] = useState(false);
-  const [currentContentIndex, setCurrentContentIndex] = useState(0);
+  const [showGameOverModal, setShowGameOverModal] = useState(false);
 
-  // Función para obtener el título con letras adivinadas
   const getDisplayTitle = () => {
-    return currentContent.titulo
+    return currentContent.nombre
       .split('')
       .map(char => {
         if (char === ' ') return ' ';
@@ -53,61 +51,50 @@ export function HangmanGame() {
       .join(' ');
   };
 
-  // Función para verificar si el título está completamente adivinado
   const isTitleCompleted = () => {
-    return currentContent.titulo
+    return currentContent.nombre
       .split('')
       .every(char => char === ' ' || guessedLetters.includes(char.toUpperCase()));
   };
 
-  // Función para pasar al siguiente contenido
-  const nextContent = () => {
-    if (currentContentIndex < contenidoEjemplo.length - 1) {
-      setCurrentContentIndex(currentContentIndex + 1);
-      setCurrentContent(contenidoEjemplo[currentContentIndex + 1]);
-      setGuessedLetters([]);
-      setScore(score + 1);
-    } else {
-      // Fin del juego - todos los contenidos completados
-      Alert.alert('¡Felicitaciones!', 'Has completado todos los títulos!', [
-        { text: 'OK', onPress: () => router.back() }
-      ]);
-    }
-  };
-
-  // Función para manejar game over
   const handleGameOver = () => {
+    // Agregar jugador a la lista de top players
+    addTopPlayer({ name: playerName, score });
     setGameOver(true);
-    Alert.alert('Game Over', `Tu puntuación final: ${score}`, [
-      { text: 'OK', onPress: () => router.back() }
-    ]);
+    setShowGameOverModal(true);
   };
 
-  // Función para manejar la adivinanza del título completo
+  const handleReturnToStart = () => {
+    setShowGameOverModal(false);
+    resetGame();
+    router.push(ROUTES.HANGMAN);
+  };
+
   const handleTitleGuess = () => {
-    if (titleGuess.trim().toLowerCase() === currentContent.titulo.toLowerCase()) {
+    if (titleGuess.trim().toLowerCase() === currentContent.nombre.toLowerCase()) {
       setShowTitleModal(false);
       setTitleGuess('');
       nextContent();
     } else {
-      setLives(lives - 1);
+      const newLives = lives - 1;
+      setLives(newLives);
       setShowTitleModal(false);
       setTitleGuess('');
-      if (lives - 1 <= 0) {
+      if (newLives <= 0) {
         handleGameOver();
       }
     }
   };
 
-  // Función para manejar la adivinanza de una letra
   const handleLetterGuess = (letter: string) => {
     if (!guessedLetters.includes(letter)) {
       const newGuessedLetters = [...guessedLetters, letter];
       setGuessedLetters(newGuessedLetters);
       
-      if (!currentContent.titulo.toUpperCase().includes(letter)) {
-        setLives(lives - 1);
-        if (lives - 1 <= 0) {
+      if (!currentContent.nombre.toUpperCase().includes(letter)) {
+        const newLives = lives - 1;
+        setLives(newLives);
+        if (newLives <= 0) {
           setShowLetterModal(false);
           handleGameOver();
           return;
@@ -117,7 +104,6 @@ export function HangmanGame() {
     setShowLetterModal(false);
   };
 
-  // Verificar si el título está completado después de cada letra
   useEffect(() => {
     if (isTitleCompleted() && guessedLetters.length > 0) {
       setTimeout(() => {
@@ -125,6 +111,12 @@ export function HangmanGame() {
       }, 1000);
     }
   }, [guessedLetters]);
+
+  useEffect(() => {
+    if (lives <= 0 && !showGameOverModal) {
+      handleGameOver();
+    }
+  }, [lives]);
 
   const renderHearts = () => {
     return Array.from({ length: 5 }, (_, index) => (
@@ -141,7 +133,13 @@ export function HangmanGame() {
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.exitButton} onPress={() => router.back()}>
+        <TouchableOpacity 
+          style={styles.exitButton} 
+          onPress={() => {
+            resetGame();
+            router.back();
+          }}
+        >
           <Ionicons name="arrow-back" size={20} color="white" />
           <TextPressStart2P style={styles.exitText}>EXIT</TextPressStart2P>
         </TouchableOpacity>
@@ -179,7 +177,7 @@ export function HangmanGame() {
 
       {/* Área de contenido */}
       <View style={styles.contentArea}>
-        <Image source={{ uri: currentContent.imagen }} style={styles.contentImage} />
+        <Image source={{ uri: currentContent.imageUrl }} style={styles.contentImage} />
       </View>
 
       {/* Área de título con guiones */}
@@ -270,6 +268,39 @@ export function HangmanGame() {
                 </TouchableOpacity>
               ))}
             </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Modal de Game Over */}
+      <Modal
+        visible={showGameOverModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={handleReturnToStart}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalContent, { alignItems: 'center' }]}>
+            <TextPressStart2P style={[styles.modalTitle, { color: Colors.purpura }]}>
+              GAME OVER
+            </TextPressStart2P>
+            
+            <Text style={[styles.playerText, { fontSize: 16, marginVertical: 10 }]}>
+              Jugador: {playerName}
+            </Text>
+            
+            <Text style={[styles.scoreText, { fontSize: 20, fontWeight: 'bold', marginBottom: 20 }]}>
+              Puntuación: {score}
+            </Text>
+            
+            <TouchableOpacity 
+              style={[styles.submitButton, { backgroundColor: Colors.verde }]}
+              onPress={handleReturnToStart}
+            >
+              <TextPressStart2P style={styles.submitButtonText}>
+                VOLVER AL INICIO
+              </TextPressStart2P>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -365,7 +396,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center',
   },
-  // Estilos de modales
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.8)',

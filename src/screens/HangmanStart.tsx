@@ -14,8 +14,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { TextPressStart2P } from "@/src/components/font";
 import { Colors } from "@/src/constants/Colors";
 import { ROUTES } from '../navegation/routes';
+import { useHangman } from '../context/hangmanContext';
 
-// Datos del leaderboard
 const topPlayers = [
   { name: 'PixelMaster', score: 12 },
   { name: 'NinjaGamer', score: 10 },
@@ -27,13 +27,14 @@ const topPlayers = [
 export function HangmanStart() {
   const router = useRouter();
   const [showNameModal, setShowNameModal] = useState(false);
-  const [playerName, setPlayerName] = useState('');
+  const { playerName, setPlayerName, resetGame } = useHangman();
 
   const handleBackPress = () => {
     router.back();
   };
 
   const handleStartGame = () => {
+    resetGame();
     setShowNameModal(true);
   };
 
@@ -45,7 +46,6 @@ export function HangmanStart() {
   const handleStartWithName = () => {
     if (playerName.trim()) {
       setShowNameModal(false);
-      // Navegar a la pantalla del juego con el nombre del jugador
       router.push(ROUTES.HANGMANGAME);
     } else {
       Alert.alert('Error', 'Por favor ingresa tu nombre para continuar');
@@ -86,20 +86,20 @@ export function HangmanStart() {
 
         {/* Leaderboard */}
         <View style={styles.leaderboardContainer}>
-          <TextPressStart2P style={styles.leaderboardTitle}>
-            Top Players
-          </TextPressStart2P>
-          
-          <View style={styles.playersList}>
-            {topPlayers.map((player, index) => (
-              <View key={index} style={styles.playerRow}>
-                <Text style={styles.playerRank}>{index + 1}.</Text>
-                <Text style={styles.playerName}>{player.name}</Text>
-                <Text style={styles.playerScore}>{player.score}</Text>
-              </View>
-            ))}
+            <TextPressStart2P style={styles.leaderboardTitle}>
+              Top Players
+            </TextPressStart2P>
+            
+            <View style={styles.playersList}>
+              {topPlayers.map((player, index) => (
+                <View key={index} style={styles.playerRow}>
+                  <Text style={styles.playerRank}>{index + 1}.</Text>
+                  <Text style={styles.playerName}>{player.name}</Text>
+                  <Text style={styles.playerScore}>{player.score}</Text>
+                </View>
+              ))}
+            </View>
           </View>
-        </View>
       </View>
 
       {/* Modal para ingresar nombre */}
@@ -242,7 +242,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
   },
-  // Estilos del modal
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.8)',
