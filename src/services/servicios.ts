@@ -1,9 +1,9 @@
 import { API_URL } from "@/src/constants/constants";
 import { IContenidoAudiovisual } from "@/src/data/contenidoAudiovisual";
 import { ITipoContenidoAudiovisual } from "@/src/data/tiposContenidoAudiovisual";
-import { IGeneroContenidoAudiovisual } from "../data/generosContenidoAudiovisual";
+import { IGeneroContenidoAudiovisual } from "@/src/data/generosContenidoAudiovisual";
 
-export async function getContenidos(): Promise<IContenidoAudiovisual> {
+export async function getContenidos(): Promise<IContenidoAudiovisual[]> {
   const res = await fetch(`${API_URL}/contenidos`);
   if (!res.ok) {
     console.error("DETAILS:", await res.text());

@@ -1,29 +1,28 @@
 import React from "react";
 import { View, StyleSheet, FlatList } from "react-native";
 import { Card } from "@/src/components/cards";
-import { contenidosAudiovisuales } from "@/src/data/contenidoAudiovisual";
-import { tiposContenidoAudiovisual } from "@/src/data/tiposContenidoAudiovisual";
 import { TextPressStart2P } from "@/src/components/font";
 import { Colors } from "@/src/constants/constants";
+import { useContent } from "@/src/context/contentContext";
 
 type CardScrollProps = {
   tipoId: number;
-  filterFunction?: (items: typeof contenidosAudiovisuales) => typeof contenidosAudiovisuales;
+  filterFunction?: (items: any[]) => any[];
 };
 
 export const CardScroll = ({ tipoId, filterFunction }: CardScrollProps) => {
-  // Filtrar primero por tipo
-  let data = contenidosAudiovisuales.filter(item => item.tipoId === tipoId);
-  
-  // Aplicar filtro adicional si existe
+  const { contenidos, tipos } = useContent();
+
+  let data = contenidos[tipoId] || [];
+
   if (filterFunction) {
     data = filterFunction(data);
   }
 
-  const tipo = tiposContenidoAudiovisual.find(t => t.id === tipoId);
+  const tipo = tipos.find(t => t.id === tipoId);
   const title = tipo ? tipo.plural.toUpperCase() : '';
 
-  if (data.length === 0) return null; // No mostrar si no hay resultados
+  if (data.length === 0) return null;
 
   return (
     <View style={styles.audiovisuales}>
@@ -46,20 +45,16 @@ export const CardScroll = ({ tipoId, filterFunction }: CardScrollProps) => {
   );
 };
 
-// ... (tus estilos actuales se mantienen igual)
-
 const styles = StyleSheet.create({
   audiovisuales: {
     width: '100%',
     marginBottom: 20,
   },
-
   categoriaSerieContainer: {
     paddingHorizontal: 20,
     marginBottom: -15,
     zIndex: 1,
   },
-
   categoria: {
     backgroundColor: Colors.purpura,
     borderWidth: 2,
@@ -69,14 +64,12 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     padding: 5
   },
-
   categoriaText: {
     color: "white",
     fontSize: 11,
     textAlign: "center",
     paddingVertical: 4,
   },
-
   borde: {
     borderColor: Colors.grisOscuro,
     borderWidth: 4,
@@ -84,11 +77,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     paddingTop: 20,
   },
-
   horizontalScrollContent: {
     paddingHorizontal: 10,
     paddingBottom: 15,
   },
 });
-
-export default CardScroll;
