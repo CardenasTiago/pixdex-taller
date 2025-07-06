@@ -8,7 +8,7 @@ import { generosContenidoAudiovisual } from "@/src/data/generosContenidoAudiovis
 import { ActionButton } from "@/src/components/actionButtom";
 import { Label } from "@/src/components/lable";                
 import { Image } from "expo-image";
-import { Colors } from "@/src/constants/Colors";
+import { Colors } from "@/src/constants/constants";
 
 type Props = { cardId: number };
 
@@ -39,7 +39,6 @@ export const DetailsCard = ({ cardId }: Props) => {
           size={18}
         />
 
-        {/* MARCO GRIS + CONTENIDO */}
         <View style={styles.card}>
           <Image source={{ uri: contenido.imageUrl }} style={styles.image} contentFit="cover" />
 

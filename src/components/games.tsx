@@ -1,6 +1,6 @@
 import { Text, View, StyleSheet, Platform, TouchableOpacity } from 'react-native';
 import {TextPressStart2P} from "@/src/components/font";
-import {Colors} from "@/src/constants/Colors";
+import {Colors} from "@/src/constants/constants";
 import { useRouter } from 'expo-router';
 import { ROUTES } from '../navegation/routes';
 

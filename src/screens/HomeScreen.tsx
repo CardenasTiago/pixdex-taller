@@ -2,7 +2,7 @@ import { StyleSheet, ScrollView, View, SafeAreaView } from "react-native";
 import { Navbar } from "@/src/components/navbar";       
 import { GameCard } from "@/src/components/games";
 import { CardScroll } from "@/src/components/cardsScroll";
-import { Colors } from "@/src/constants/Colors";
+import { Colors } from "@/src/constants/constants";
 import { tiposContenidoAudiovisual } from "@/src/data/tiposContenidoAudiovisual";
 import React, { useState } from "react";
 import { FilterModal } from "../components/filter";

@@ -7,3 +7,5 @@ export const Colors = {
     grisOscuro: '#403E43',
     gris: '#4A3D70'
 };
+
+export const API_URL = process.env.EXPO_PUBLIC_API_URL;

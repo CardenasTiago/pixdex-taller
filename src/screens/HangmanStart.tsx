@@ -12,7 +12,7 @@ import {
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { TextPressStart2P } from "@/src/components/font";
-import { Colors } from "@/src/constants/Colors";
+import { Colors } from "@/src/constants/constants";
 import { ROUTES } from '../navegation/routes';
 import { useHangman } from '../context/hangmanContext';
 
@@ -54,7 +54,6 @@ export function HangmanStart() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header con botón de regreso */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
           <Ionicons name="arrow-back" size={24} color="white" />
@@ -62,29 +61,24 @@ export function HangmanStart() {
         </TouchableOpacity>
       </View>
 
-      {/* Contenido principal */}
       <View style={styles.content}>
-        {/* Título del juego */}
         <View style={styles.titleContainer}>
           <TextPressStart2P style={styles.gameTitle}>
             Hangman{'\n'}Challenge
           </TextPressStart2P>
         </View>
 
-        {/* Descripción */}
         <Text style={styles.description}>
           Guess the titles of popular TV shows, movies, and anime one letter at a time. 
           You have 5 lives - can you get the highest score?
         </Text>
 
-        {/* Botón de inicio */}
         <TouchableOpacity style={styles.startButton} onPress={handleStartGame}>
           <TextPressStart2P style={styles.startButtonText}>
             START GAME
           </TextPressStart2P>
         </TouchableOpacity>
 
-        {/* Leaderboard */}
         <View style={styles.leaderboardContainer}>
             <TextPressStart2P style={styles.leaderboardTitle}>
               Top Players
@@ -102,7 +96,6 @@ export function HangmanStart() {
           </View>
       </View>
 
-      {/* Modal para ingresar nombre */}
       <Modal
         visible={showNameModal}
         transparent={true}
@@ -111,17 +104,14 @@ export function HangmanStart() {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            {/* Botón de cerrar */}
             <TouchableOpacity style={styles.closeButton} onPress={handleCloseModal}>
               <Ionicons name="close" size={24} color="white" />
             </TouchableOpacity>
-            
-            {/* Título del modal */}
+
             <TextPressStart2P style={styles.modalTitle}>
               Enter Your Name
             </TextPressStart2P>
-            
-            {/* Campo de texto */}
+
             <TextInput
               style={styles.nameInput}
               placeholder="Nombre del jugador"
@@ -131,8 +121,7 @@ export function HangmanStart() {
               maxLength={20}
               autoFocus={true}
             />
-            
-            {/* Botón de inicio */}
+
             <TouchableOpacity style={styles.modalStartButton} onPress={handleStartWithName}>
               <TextPressStart2P style={styles.modalStartText}>
                 START GAME

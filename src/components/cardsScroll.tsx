@@ -4,7 +4,7 @@ import { Card } from "@/src/components/cards";
 import { contenidosAudiovisuales } from "@/src/data/contenidoAudiovisual";
 import { tiposContenidoAudiovisual } from "@/src/data/tiposContenidoAudiovisual";
 import { TextPressStart2P } from "@/src/components/font";
-import { Colors } from "@/src/constants/Colors";
+import { Colors } from "@/src/constants/constants";
 
 type CardScrollProps = {
   tipoId: number;

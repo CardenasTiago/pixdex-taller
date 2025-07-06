@@ -50,7 +50,6 @@ export const HangmanProvider = ({ children }: { children: ReactNode }) => {
   const addTopPlayer = (player: PlayerScore) => {
     setTopPlayers(prev => {
       const newPlayers = [...prev, player];
-      // Ordenar por puntuación descendente y mantener solo los top 5
       return newPlayers.sort((a, b) => b.score - a.score).slice(0, 5);
     });
   };

@@ -9,7 +9,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { Colors } from "@/src/constants/Colors";
+import { Colors } from "@/src/constants/constants";
 import { generosContenidoAudiovisual } from "@/src/data/generosContenidoAudiovisual";
 import { tiposContenidoAudiovisual } from "@/src/data/tiposContenidoAudiovisual";
 import { TextPressStart2P } from "./font";

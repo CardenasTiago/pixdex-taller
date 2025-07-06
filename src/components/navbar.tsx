@@ -1,7 +1,7 @@
 // src/components/Navbar.tsx
 import { View, StyleSheet, Dimensions } from "react-native";
 import { TextPressStart2P } from "@/src/components/font";
-import { Colors } from "@/src/constants/Colors";
+import { Colors } from "@/src/constants/constants";
 import { ActionButton } from "@/src/components/actionButtom";
 import { SafeAreaView } from "react-native-safe-area-context";
 

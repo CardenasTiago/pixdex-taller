@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { TextPressStart2P } from "./font";
-import { Colors } from "@/src/constants/Colors";
+import { Colors } from "@/src/constants/constants";
 
 type GenreTagsProps = {
     genres: string[];

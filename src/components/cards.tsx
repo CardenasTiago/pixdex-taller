@@ -4,7 +4,7 @@ import { Href, router } from 'expo-router';
 import { TextPressStart2P } from "@/src/components/font";
 import { ROUTES } from '@/src/navegation/routes';
 import { Image } from 'expo-image';
-import { Colors } from "@/src/constants/Colors";
+import { Colors } from "@/src/constants/constants";
 import { GenreTags } from "@/src/components/genreTags";
 import { contenidosAudiovisuales } from '@/src/data/contenidoAudiovisual';
 import { generosContenidoAudiovisual } from '@/src/data/generosContenidoAudiovisual';

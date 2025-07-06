@@ -13,7 +13,7 @@ import {
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { TextPressStart2P } from "@/src/components/font";
-import { Colors } from "@/src/constants/Colors";
+import { Colors } from "@/src/constants/constants";
 import { useHangman } from '../context/hangmanContext';
 import { ROUTES } from '../navegation/routes';
 
@@ -131,7 +131,6 @@ export function HangmanGame() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity 
           style={styles.exitButton} 
@@ -154,7 +153,6 @@ export function HangmanGame() {
         </View>
       </View>
 
-      {/* Botones de juego */}
       <View style={styles.gameButtonsContainer}>
         <TouchableOpacity 
           style={styles.gameButton} 
@@ -175,19 +173,16 @@ export function HangmanGame() {
         </TouchableOpacity>
       </View>
 
-      {/* Área de contenido */}
       <View style={styles.contentArea}>
         <Image source={{ uri: currentContent.imageUrl }} style={styles.contentImage} />
       </View>
 
-      {/* Área de título con guiones */}
       <View style={styles.titleArea}>
         <TextPressStart2P style={styles.titleDisplay}>
           {getDisplayTitle()}
         </TextPressStart2P>
       </View>
 
-      {/* Modal para adivinar título */}
       <Modal
         visible={showTitleModal}
         transparent={true}
@@ -228,7 +223,6 @@ export function HangmanGame() {
         </View>
       </Modal>
 
-      {/* Modal para adivinar letra */}
       <Modal
         visible={showLetterModal}
         transparent={true}
@@ -272,7 +266,6 @@ export function HangmanGame() {
         </View>
       </Modal>
 
-      {/* Modal de Game Over */}
       <Modal
         visible={showGameOverModal}
         transparent={true}

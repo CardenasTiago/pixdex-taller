@@ -1,7 +1,7 @@
 // src/components/Label.tsx
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { Colors } from "@/src/constants/Colors";
+import { Colors } from "@/src/constants/constants";
 
 export const Label = ({ children }: { children: string }) => (
   <View style={styles.box}>

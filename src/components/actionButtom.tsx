@@ -2,7 +2,7 @@
 import { TouchableOpacity, View, StyleSheet, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { TextPressStart2P } from "./font";
-import { Colors } from "@/src/constants/Colors";
+import { Colors } from "@/src/constants/constants";
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 type Props = {
