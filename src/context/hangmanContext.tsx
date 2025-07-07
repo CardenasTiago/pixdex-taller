@@ -31,11 +31,17 @@ type HangmanContextType = {
 
 const HangmanContext = createContext<HangmanContextType | undefined>(undefined);
 
+// 🔁 Función para mezclar el array de contenidos
+const shuffleArray = (array: ContentItem[]): ContentItem[] => {
+  return [...array].sort(() => Math.random() - 0.5);
+};
+
 export const HangmanProvider = ({ children }: { children: ReactNode }) => {
   const [playerName, setPlayerName] = useState('');
   const [lives, setLives] = useState(5);
   const [score, setScore] = useState(0);
-  const [currentContent, setCurrentContent] = useState<ContentItem>(contenidosAudiovisuales[0]);
+  const [shuffledContent, setShuffledContent] = useState<ContentItem[]>(() => shuffleArray(contenidosAudiovisuales));
+  const [currentContent, setCurrentContent] = useState<ContentItem>(shuffledContent[0]);
   const [guessedLetters, setGuessedLetters] = useState<string[]>([]);
   const [currentContentIndex, setCurrentContentIndex] = useState(0);
   const [gameOver, setGameOver] = useState(false);
@@ -49,13 +55,13 @@ export const HangmanProvider = ({ children }: { children: ReactNode }) => {
 
   const addTopPlayer = (player: PlayerScore) => {
     if (!player.name.trim()) return;
-    
+
     setTopPlayers(prevPlayers => {
       const playerExists = prevPlayers.some(
         p => p.name === player.name && p.score === player.score
       );
       if (playerExists) return prevPlayers;
-      
+
       const newPlayers = [...prevPlayers, player]
         .sort((a, b) => b.score - a.score)
         .slice(0, 5);
@@ -64,19 +70,21 @@ export const HangmanProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const resetGame = () => {
+    const newShuffled = shuffleArray(contenidosAudiovisuales);
+    setShuffledContent(newShuffled);
+    setCurrentContent(newShuffled[0]);
     setLives(5);
     setScore(0);
-    setCurrentContent(contenidosAudiovisuales[0]);
     setGuessedLetters([]);
     setCurrentContentIndex(0);
     setGameOver(false);
   };
 
   const nextContent = () => {
-    if (currentContentIndex < contenidosAudiovisuales.length - 1) {
+    if (currentContentIndex < shuffledContent.length - 1) {
       const newIndex = currentContentIndex + 1;
       setCurrentContentIndex(newIndex);
-      setCurrentContent(contenidosAudiovisuales[newIndex]);
+      setCurrentContent(shuffledContent[newIndex]);
       setGuessedLetters([]);
       setScore(prev => prev + 1);
     } else {
