@@ -164,6 +164,7 @@ export function HangmanGame() {
             text='GUESS TITLE'
             onPress={() => setShowTitleModal(true)}
             borderTopLeftColor={Colors.purpuraClaro} borderBottomRightColor={Colors.purpuraOscuro}
+            size={12}
           />
           
           <ActionButton
@@ -171,6 +172,7 @@ export function HangmanGame() {
             text='GUESS LETTER'
             onPress={() => setShowLetterModal(true)}
             borderTopLeftColor={Colors.purpuraClaro} borderBottomRightColor={Colors.purpuraOscuro}
+            size={12}
           />
         </View>
 
@@ -317,6 +319,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 20,
     paddingBottom: 10,
+    gap: 50
   },
   border: {
     flex: 1,
@@ -350,8 +353,6 @@ const styles = StyleSheet.create({
   gameButtonsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    paddingHorizontal: 20,
-    paddingVertical: 20,
   },
   contentArea: {
     flex: 1,

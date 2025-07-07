@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   border:{flex: 1,
     borderWidth: 4,
     borderColor: Colors.grisOscuro,
-    padding: 5,
+    padding: 15,
     margin: 10,
     borderRadius: 10,},
   scroll: { flexGrow: 1, padding: 16, paddingBottom: 24 },
