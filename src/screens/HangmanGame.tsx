@@ -32,7 +32,8 @@ export function HangmanGame() {
     addTopPlayer,
     resetGame,
     nextContent,
-    setGameOver
+    setGameOver,
+    gameOver
   } = useHangman();
   
   const [showTitleModal, setShowTitleModal] = useState(false);
@@ -58,16 +59,17 @@ export function HangmanGame() {
   };
 
   const handleGameOver = () => {
-    // Agregar jugador a la lista de top players
-    addTopPlayer({ name: playerName, score });
-    setGameOver(true);
+    if (!gameOver && playerName.trim()) {
+      addTopPlayer({ name: playerName, score });
+      setGameOver(true);
+    }
     setShowGameOverModal(true);
   };
 
   const handleReturnToStart = () => {
     setShowGameOverModal(false);
     resetGame();
-    router.push(ROUTES.HANGMAN);
+    router.replace(ROUTES.HANGMAN);
   };
 
   const handleTitleGuess = () => {
@@ -279,11 +281,11 @@ export function HangmanGame() {
             </TextPressStart2P>
             
             <Text style={[styles.playerText, { fontSize: 16, marginVertical: 10 }]}>
-              Jugador: {playerName}
+              Player: {playerName}
             </Text>
             
             <Text style={[styles.scoreText, { fontSize: 20, fontWeight: 'bold', marginBottom: 20 }]}>
-              Puntuación: {score}
+              Score: {score}
             </Text>
             
             <TouchableOpacity 
@@ -291,7 +293,7 @@ export function HangmanGame() {
               onPress={handleReturnToStart}
             >
               <TextPressStart2P style={styles.submitButtonText}>
-                VOLVER AL INICIO
+                RETURN TO START
               </TextPressStart2P>
             </TouchableOpacity>
           </View>
@@ -305,15 +307,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.fondo,
-    paddingTop: 50,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
+    paddingTop: 20,
     paddingBottom: 10,
-    gap: 50,
   },
   exitButton: {
     flexDirection: 'row',

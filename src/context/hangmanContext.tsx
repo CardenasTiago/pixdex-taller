@@ -48,9 +48,18 @@ export const HangmanProvider = ({ children }: { children: ReactNode }) => {
   ]);
 
   const addTopPlayer = (player: PlayerScore) => {
-    setTopPlayers(prev => {
-      const newPlayers = [...prev, player];
-      return newPlayers.sort((a, b) => b.score - a.score).slice(0, 5);
+    if (!player.name.trim()) return;
+    
+    setTopPlayers(prevPlayers => {
+      const playerExists = prevPlayers.some(
+        p => p.name === player.name && p.score === player.score
+      );
+      if (playerExists) return prevPlayers;
+      
+      const newPlayers = [...prevPlayers, player]
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 5);
+      return newPlayers;
     });
   };
 
@@ -71,6 +80,7 @@ export const HangmanProvider = ({ children }: { children: ReactNode }) => {
       setGuessedLetters([]);
       setScore(prev => prev + 1);
     } else {
+      addTopPlayer({ name: playerName, score });
       setGameOver(true);
     }
   };

@@ -16,18 +16,10 @@ import { Colors } from "@/src/constants/constants";
 import { ROUTES } from '../navegation/routes';
 import { useHangman } from '../context/hangmanContext';
 
-const topPlayers = [
-  { name: 'PixelMaster', score: 12 },
-  { name: 'NinjaGamer', score: 10 },
-  { name: 'MediaGuru', score: 8 },
-  { name: 'TVFanatic', score: 7 },
-  { name: 'AnimeWizard', score: 5 },
-];
-
 export function HangmanStart() {
   const router = useRouter();
   const [showNameModal, setShowNameModal] = useState(false);
-  const { playerName, setPlayerName, resetGame } = useHangman();
+  const { playerName, setPlayerName, resetGame, topPlayers } = useHangman();
 
   const handleBackPress = () => {
     router.back();
@@ -80,20 +72,20 @@ export function HangmanStart() {
         </TouchableOpacity>
 
         <View style={styles.leaderboardContainer}>
-            <TextPressStart2P style={styles.leaderboardTitle}>
-              Top Players
-            </TextPressStart2P>
-            
-            <View style={styles.playersList}>
-              {topPlayers.map((player, index) => (
-                <View key={index} style={styles.playerRow}>
-                  <Text style={styles.playerRank}>{index + 1}.</Text>
-                  <Text style={styles.playerName}>{player.name}</Text>
-                  <Text style={styles.playerScore}>{player.score}</Text>
-                </View>
-              ))}
-            </View>
+          <TextPressStart2P style={styles.leaderboardTitle}>
+            Top Players
+          </TextPressStart2P>
+          
+          <View style={styles.playersList}>
+            {topPlayers.map((player, index) => (
+              <View key={`${player.name}-${index}`} style={styles.playerRow}>
+                <Text style={styles.playerRank}>{index + 1}.</Text>
+                <Text style={styles.playerName}>{player.name}</Text>
+                <Text style={styles.playerScore}>{player.score}</Text>
+              </View>
+            ))}
           </View>
+        </View>
       </View>
 
       <Modal
@@ -138,7 +130,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.fondo,
-    paddingTop: 50
   },
   header: {
     paddingHorizontal: 20,
@@ -203,6 +194,7 @@ const styles = StyleSheet.create({
     color: Colors.verde,
     fontSize: 16,
     marginBottom: 20,
+    textAlign: 'center',
   },
   playersList: {
     backgroundColor: Colors.grisOscuro,
