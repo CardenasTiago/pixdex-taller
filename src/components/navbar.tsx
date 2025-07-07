@@ -24,6 +24,7 @@ export function Navbar({ onFilterPress }: Props) {
           text="FILTRAR"
           onPress={onFilterPress}
           size={isSmallDevice ? 16 : isMediumDevice ? 18 : 20}
+          borderTopLeftColor={Colors.purpuraClaro} borderBottomRightColor={Colors.purpuraOscuro}
         />
       </View>
     </SafeAreaView>

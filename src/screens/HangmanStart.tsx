@@ -15,6 +15,7 @@ import { TextPressStart2P } from "@/src/components/font";
 import { Colors } from "@/src/constants/constants";
 import { ROUTES } from '../navegation/routes';
 import { useHangman } from '../context/hangmanContext';
+import { ActionButton } from '../components/actionButtom';
 
 export function HangmanStart() {
   const router = useRouter();
@@ -46,82 +47,74 @@ export function HangmanStart() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
-          <Ionicons name="arrow-back" size={24} color="white" />
-          <TextPressStart2P style={styles.backText}>BACK</TextPressStart2P>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.content}>
-        <View style={styles.titleContainer}>
-          <TextPressStart2P style={styles.gameTitle}>
-            Hangman{'\n'}Challenge
-          </TextPressStart2P>
-        </View>
-
-        <Text style={styles.description}>
-          Guess the titles of popular TV shows, movies, and anime one letter at a time. 
-          You have 5 lives - can you get the highest score?
-        </Text>
-
-        <TouchableOpacity style={styles.startButton} onPress={handleStartGame}>
-          <TextPressStart2P style={styles.startButtonText}>
-            START GAME
-          </TextPressStart2P>
-        </TouchableOpacity>
-
-        <View style={styles.leaderboardContainer}>
-          <TextPressStart2P style={styles.leaderboardTitle}>
-            Top Players
-          </TextPressStart2P>
-          
-          <View style={styles.playersList}>
-            {topPlayers.map((player, index) => (
-              <View key={`${player.name}-${index}`} style={styles.playerRow}>
-                <Text style={styles.playerRank}>{index + 1}.</Text>
-                <Text style={styles.playerName}>{player.name}</Text>
-                <Text style={styles.playerScore}>{player.score}</Text>
-              </View>
-            ))}
+        <View style={styles.header}>
+            <ActionButton icon='arrow-back' text='BACK' onPress={handleBackPress} borderTopLeftColor={Colors.purpuraClaro} borderBottomRightColor={Colors.purpuraOscuro}/>
           </View>
-        </View>
-      </View>
-
-      <Modal
-        visible={showNameModal}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={handleCloseModal}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <TouchableOpacity style={styles.closeButton} onPress={handleCloseModal}>
-              <Ionicons name="close" size={24} color="white" />
-            </TouchableOpacity>
-
-            <TextPressStart2P style={styles.modalTitle}>
-              Enter Your Name
-            </TextPressStart2P>
-
-            <TextInput
-              style={styles.nameInput}
-              placeholder="Nombre del jugador"
-              placeholderTextColor="#999"
-              value={playerName}
-              onChangeText={setPlayerName}
-              maxLength={20}
-              autoFocus={true}
-            />
-
-            <TouchableOpacity style={styles.modalStartButton} onPress={handleStartWithName}>
-              <TextPressStart2P style={styles.modalStartText}>
-                START GAME
+      <View style={styles.border}>
+          <View style={styles.content}>
+            <View style={styles.titleContainer}>
+              <TextPressStart2P style={styles.gameTitle}>
+                Hangman{'\n'}Challenge
               </TextPressStart2P>
-            </TouchableOpacity>
+            </View>
+
+            <Text style={styles.description}>
+              Guess the titles of popular TV shows, movies, and anime one letter at a time. 
+              You have 5 lives - can you get the highest score?
+            </Text>
+
+            <View style={styles.startButton}>
+              <ActionButton icon='' text='START GAME' onPress={handleStartGame} borderTopLeftColor={Colors.verde} borderBottomRightColor={Colors.verdeOscuro}/>
+            </View>
+            <View style={styles.leaderboardContainer}>
+              <TextPressStart2P style={styles.leaderboardTitle}>
+                Top Players
+              </TextPressStart2P>
+              
+              <View style={styles.playersList}>
+                {topPlayers.map((player, index) => (
+                  <View key={`${player.name}-${index}`} style={styles.playerRow}>
+                    <Text style={styles.playerRank}>{index + 1}.</Text>
+                    <Text style={styles.playerName}>{player.name}</Text>
+                    <Text style={styles.playerScore}>{player.score}</Text>
+                  </View>
+                ))}
+              </View>
+            </View>
           </View>
-        </View>
-      </Modal>
+
+          <Modal
+            visible={showNameModal}
+            transparent={true}
+            animationType="fade"
+            onRequestClose={handleCloseModal}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContent}>
+                <TouchableOpacity style={styles.closeButton} onPress={handleCloseModal}>
+                  <Ionicons name="close" size={24} color="white" />
+                </TouchableOpacity>
+
+                <TextPressStart2P style={styles.modalTitle}>
+                  Enter Your Name
+                </TextPressStart2P>
+
+                <TextInput
+                  style={styles.nameInput}
+                  placeholder="Nombre del jugador"
+                  placeholderTextColor="#999"
+                  value={playerName}
+                  onChangeText={setPlayerName}
+                  maxLength={20}
+                  autoFocus={true}
+                />
+                <View style={styles.startButton}>
+                  <ActionButton icon='' text='START GAME' onPress={handleStartWithName} borderTopLeftColor={Colors.verde} borderBottomRightColor={Colors.verdeOscuro}/>
+                </View>
+              </View>
+            </View>
+          </Modal>
+      </View>
     </SafeAreaView>
   );
 }
@@ -130,6 +123,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.fondo,
+  },
+  border: {
+    flex: 1,
+    borderWidth: 4,
+    borderColor: Colors.grisOscuro,
+    padding: 5,
+    margin: 10,
+    borderRadius: 10,
   },
   header: {
     paddingHorizontal: 20,
@@ -175,17 +176,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   startButton: {
-    backgroundColor: Colors.purpura,
-    borderWidth: 3,
-    borderColor: Colors.purpuraOscuro,
-    paddingVertical: 15,
-    paddingHorizontal: 30,
     alignSelf: 'center',
-    marginBottom: 40,
-  },
-  startButtonText: {
-    color: 'white',
-    fontSize: 14,
+    marginBottom: 20
   },
   leaderboardContainer: {
     flex: 1,

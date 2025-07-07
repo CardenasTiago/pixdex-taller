@@ -16,7 +16,6 @@ export function HomeScreen() {
     genres: {} as Record<number, boolean>,
   });
 
-  // Inicializar filtros cuando se cargan los datos
   useEffect(() => {
     if (tipos.length > 0 && generos.length > 0) {
       setActiveFilters({
@@ -66,7 +65,6 @@ export function HomeScreen() {
           initialFilters={activeFilters}
         />
 
-        {/* JUEGOS */}
         <View style={styles.gamesRow}>
           <GameCard
             title="Desafío del Ahorcado"

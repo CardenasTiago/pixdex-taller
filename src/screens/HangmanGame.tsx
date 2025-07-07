@@ -16,6 +16,7 @@ import { TextPressStart2P } from "@/src/components/font";
 import { Colors } from "@/src/constants/constants";
 import { useHangman } from '../context/hangmanContext';
 import { ROUTES } from '../navegation/routes';
+import { ActionButton } from '../components/actionButtom';
 
 const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
@@ -134,16 +135,17 @@ export function HangmanGame() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.exitButton} 
-          onPress={() => {
-            resetGame();
-            router.back();
-          }}
-        >
-          <Ionicons name="arrow-back" size={20} color="white" />
-          <TextPressStart2P style={styles.exitText}>EXIT</TextPressStart2P>
-        </TouchableOpacity>
+        <View style={styles.exitButton}>
+          <ActionButton
+            icon='arrow-back'
+            text='EXIT'
+            onPress={() => {
+              resetGame();
+              router.back();  
+            }}
+            borderTopLeftColor={Colors.purpuraClaro} borderBottomRightColor={Colors.purpuraOscuro}
+          />
+        </View>
         
         <View style={styles.heartsContainer}>
           {renderHearts()}
@@ -155,150 +157,150 @@ export function HangmanGame() {
         </View>
       </View>
 
-      <View style={styles.gameButtonsContainer}>
-        <TouchableOpacity 
-          style={styles.gameButton} 
-          onPress={() => setShowTitleModal(true)}
-        >
-          <TextPressStart2P style={styles.gameButtonText}>
-            GUESS TITLE
-          </TextPressStart2P>
-        </TouchableOpacity>
-        
-        <TouchableOpacity 
-          style={styles.gameButton} 
-          onPress={() => setShowLetterModal(true)}
-        >
-          <TextPressStart2P style={styles.gameButtonText}>
-            GUESS LETTER
-          </TextPressStart2P>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.contentArea}>
-        <Image source={{ uri: currentContent.imageUrl }} style={styles.contentImage} />
-      </View>
-
-      <View style={styles.titleArea}>
-        <TextPressStart2P style={styles.titleDisplay}>
-          {getDisplayTitle()}
-        </TextPressStart2P>
-      </View>
-
-      <Modal
-        visible={showTitleModal}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={() => setShowTitleModal(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <TouchableOpacity 
-              style={styles.closeButton} 
-              onPress={() => setShowTitleModal(false)}
-            >
-              <Ionicons name="close" size={24} color="white" />
-            </TouchableOpacity>
-            
-            <TextPressStart2P style={styles.modalTitle}>
-              Guess the Title
-            </TextPressStart2P>
-            
-            <TextInput
-              style={styles.titleInput}
-              placeholder="Enter complete title"
-              placeholderTextColor="#999"
-              value={titleGuess}
-              onChangeText={setTitleGuess}
-              autoFocus={true}
-            />
-            
-            <TouchableOpacity 
-              style={styles.submitButton} 
-              onPress={handleTitleGuess}
-            >
-              <TextPressStart2P style={styles.submitButtonText}>
-                SUBMIT GUESS
-              </TextPressStart2P>
-            </TouchableOpacity>
-          </View>
+      <View style={styles.border}>
+        <View style={styles.gameButtonsContainer}>
+          <ActionButton 
+            icon=''
+            text='GUESS TITLE'
+            onPress={() => setShowTitleModal(true)}
+            borderTopLeftColor={Colors.purpuraClaro} borderBottomRightColor={Colors.purpuraOscuro}
+          />
+          
+          <ActionButton
+            icon=''
+            text='GUESS LETTER'
+            onPress={() => setShowLetterModal(true)}
+            borderTopLeftColor={Colors.purpuraClaro} borderBottomRightColor={Colors.purpuraOscuro}
+          />
         </View>
-      </Modal>
 
-      <Modal
-        visible={showLetterModal}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={() => setShowLetterModal(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <TouchableOpacity 
-              style={styles.closeButton} 
-              onPress={() => setShowLetterModal(false)}
-            >
-              <Ionicons name="close" size={24} color="white" />
-            </TouchableOpacity>
-            
-            <TextPressStart2P style={styles.modalTitle}>
-              Guess a Letter
-            </TextPressStart2P>
-            
-            <View style={styles.alphabetGrid}>
-              {alphabet.map((letter) => (
-                <TouchableOpacity
-                  key={letter}
-                  style={[
-                    styles.letterButton,
-                    guessedLetters.includes(letter) && styles.letterButtonDisabled
-                  ]}
-                  onPress={() => handleLetterGuess(letter)}
-                  disabled={guessedLetters.includes(letter)}
-                >
-                  <TextPressStart2P style={[
-                    styles.letterButtonText,
-                    guessedLetters.includes(letter) && styles.letterButtonTextDisabled
-                  ]}>
-                    {letter}
-                  </TextPressStart2P>
-                </TouchableOpacity>
-              ))}
+        <View style={styles.contentArea}>
+          <Image source={{ uri: currentContent.imageUrl }} style={styles.contentImage} />
+        </View>
+
+        <View style={styles.titleArea}>
+          <TextPressStart2P style={styles.titleDisplay}>
+            {getDisplayTitle()}
+          </TextPressStart2P>
+        </View>
+
+        <Modal
+          visible={showTitleModal}
+          transparent={true}
+          animationType="fade"
+          onRequestClose={() => setShowTitleModal(false)}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <TouchableOpacity 
+                style={styles.closeButton} 
+                onPress={() => setShowTitleModal(false)}
+              >
+                <Ionicons name="close" size={24} color="white" />
+              </TouchableOpacity>
+              
+              <TextPressStart2P style={styles.modalTitle}>
+                Guess the Title
+              </TextPressStart2P>
+              
+              <TextInput
+                style={styles.titleInput}
+                placeholder="Enter complete title"
+                placeholderTextColor="#999"
+                value={titleGuess}
+                onChangeText={setTitleGuess}
+                autoFocus={true}
+              />
+              
+              <View style={styles.submitButtonTitle}>
+                <ActionButton
+                  icon=''
+                  text='SUBMIT GUESS' 
+                  onPress={handleTitleGuess}
+                  borderTopLeftColor={Colors.purpuraClaro} borderBottomRightColor={Colors.purpuraOscuro}
+                />
+              </View>
+
             </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
 
-      <Modal
-        visible={showGameOverModal}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={handleReturnToStart}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={[styles.modalContent, { alignItems: 'center' }]}>
-            <TextPressStart2P style={[styles.modalTitle, { color: Colors.purpura }]}>
-              GAME OVER
-            </TextPressStart2P>
-            
-            <Text style={[styles.playerText, { fontSize: 16, marginVertical: 10 }]}>
-              Player: {playerName}
-            </Text>
-            
-            <Text style={[styles.scoreText, { fontSize: 20, fontWeight: 'bold', marginBottom: 20 }]}>
-              Score: {score}
-            </Text>
-            
-            <TouchableOpacity 
-              style={[styles.submitButton, { backgroundColor: Colors.verde }]}
-              onPress={handleReturnToStart}
-            >
-              <TextPressStart2P style={styles.submitButtonText}>
-                RETURN TO START
+        <Modal
+          visible={showLetterModal}
+          transparent={true}
+          animationType="fade"
+          onRequestClose={() => setShowLetterModal(false)}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <TouchableOpacity 
+                style={styles.closeButton} 
+                onPress={() => setShowLetterModal(false)}
+              >
+                <Ionicons name="close" size={24} color="white" />
+              </TouchableOpacity>
+              
+              <TextPressStart2P style={styles.modalTitle}>
+                Guess a Letter
               </TextPressStart2P>
-            </TouchableOpacity>
+              
+              <View style={styles.alphabetGrid}>
+                {alphabet.map((letter) => (
+                  <TouchableOpacity
+                    key={letter}
+                    style={[
+                      styles.letterButton,
+                      guessedLetters.includes(letter) && styles.letterButtonDisabled
+                    ]}
+                    onPress={() => handleLetterGuess(letter)}
+                    disabled={guessedLetters.includes(letter)}
+                  >
+                    <TextPressStart2P style={[
+                      styles.letterButtonText,
+                      guessedLetters.includes(letter) && styles.letterButtonTextDisabled
+                    ]}>
+                      {letter}
+                    </TextPressStart2P>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
+
+        <Modal
+          visible={showGameOverModal}
+          transparent={true}
+          animationType="fade"
+          onRequestClose={handleReturnToStart}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={[styles.modalContent, { alignItems: 'center' }]}>
+              <TextPressStart2P style={[styles.modalTitle, { color: Colors.purpura }]}>
+                GAME OVER
+              </TextPressStart2P>
+              
+              <Text style={[styles.playerText, { fontSize: 16, marginVertical: 10 }]}>
+                Player: {playerName}
+              </Text>
+              
+              <Text style={[styles.scoreText, { fontSize: 20, fontWeight: 'bold', marginBottom: 20 }]}>
+                Score: {score}
+              </Text>
+              
+              <TouchableOpacity 
+                style={[styles.submitButton, { backgroundColor: Colors.verde }]}
+                onPress={handleReturnToStart}
+              >
+                <TextPressStart2P style={styles.submitButtonText}>
+                  RETURN TO START
+                </TextPressStart2P>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      </View>
+      
     </SafeAreaView>
   );
 }
@@ -316,21 +318,18 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 10,
   },
+  border: {
+    flex: 1,
+    borderWidth: 4,
+    borderColor: Colors.grisOscuro,
+    padding: 5,
+    margin: 10,
+    borderRadius: 10,
+  },
   exitButton: {
     flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: Colors.purpura,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderWidth: 2,
-    borderColor: Colors.purpuraOscuro,
     flex: 1,
     maxWidth: 100,
-  },
-  exitText: {
-    color: 'white',
-    fontSize: 10,
-    marginLeft: 5,
   },
   heartsContainer: {
     flexDirection: 'row',
@@ -353,17 +352,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     paddingHorizontal: 20,
     paddingVertical: 20,
-  },
-  gameButton: {
-    backgroundColor: Colors.purpura,
-    borderWidth: 3,
-    borderColor: Colors.purpuraOscuro,
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-  },
-  gameButtonText: {
-    color: 'white',
-    fontSize: 12,
   },
   contentArea: {
     flex: 1,
@@ -429,6 +417,11 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 20,
     borderRadius: 5,
+  },
+  submitButtonTitle: {
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    alignSelf: 'center',
   },
   submitButton: {
     backgroundColor: Colors.purpura,

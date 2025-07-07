@@ -132,7 +132,7 @@ export const FilterModal = ({
             <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
               <TextPressStart2P style={styles.cancelText}>CANCEL</TextPressStart2P>
             </TouchableOpacity>
-            <ActionButton icon={"filter"} text={"APPLY FILTERS"} onPress={handleApply} />
+            <ActionButton icon={"filter"} text={"APPLY FILTERS"} onPress={handleApply} borderTopLeftColor={Colors.purpuraClaro} borderBottomRightColor={Colors.purpuraOscuro} />
           </View>
         </View>
       </SafeAreaView>
