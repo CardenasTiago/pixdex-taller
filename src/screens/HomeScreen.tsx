@@ -1,4 +1,4 @@
-import { StyleSheet, ScrollView, View, SafeAreaView } from "react-native";
+import { StyleSheet, ScrollView, View, SafeAreaView} from "react-native";
 import { Navbar } from "@/src/components/navbar";       
 import { GameCard } from "@/src/components/games";
 import { CardScroll } from "@/src/components/cardsScroll";
