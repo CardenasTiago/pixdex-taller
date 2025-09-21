@@ -177,7 +177,7 @@ export function HangmanGame() {
         </View>
 
         <View style={styles.contentArea}>
-          <Image source={{ uri: currentContent.imageUrl }} style={styles.contentImage} />
+          <Image source={{ uri: String(currentContent.imageUrl) }} style={styles.contentImage} />
         </View>
 
         <View style={styles.titleArea}>

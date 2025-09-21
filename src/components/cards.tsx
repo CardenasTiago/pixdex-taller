@@ -32,7 +32,7 @@ export const Card = ({ id }: CardProps) => {
     >
       <View style={styles.imageContainerHorizontal}>
         <Image 
-          source={{ uri: contenido.imageUrl }} 
+          source={{ uri: String(contenido.imageUrl) }} 
           style={styles.image}
           contentFit="cover"
         />
