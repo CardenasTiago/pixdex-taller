@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  StyleSheet, 
-  View, 
-  Text, 
-  TouchableOpacity, 
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
   SafeAreaView,
   Modal,
   TextInput,
   Alert,
-  Image 
+  Image
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { TextPressStart2P } from "@/src/components/font";
+import { TextPressStart2P } from "@/src/components/Font";
 import { Colors } from "@/src/constants/constants";
 import { useHangman } from '../context/hangmanContext';
-import { ROUTES } from '../navegation/routes';
-import { ActionButton } from '../components/actionButtom';
+import { ROUTES } from '../navigation/routes';
+import { ActionButton } from '../components/ActionButton';
 
 const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
@@ -36,7 +36,7 @@ export function HangmanGame() {
     setGameOver,
     gameOver
   } = useHangman();
-  
+
   const [showTitleModal, setShowTitleModal] = useState(false);
   const [showLetterModal, setShowLetterModal] = useState(false);
   const [titleGuess, setTitleGuess] = useState('');
@@ -93,7 +93,7 @@ export function HangmanGame() {
     if (!guessedLetters.includes(letter)) {
       const newGuessedLetters = [...guessedLetters, letter];
       setGuessedLetters(newGuessedLetters);
-      
+
       if (!currentContent.nombre.toUpperCase().includes(letter)) {
         const newLives = lives - 1;
         setLives(newLives);
@@ -123,11 +123,11 @@ export function HangmanGame() {
 
   const renderHearts = () => {
     return Array.from({ length: 5 }, (_, index) => (
-      <Ionicons 
-        key={index} 
-        name="heart" 
-        size={24} 
-        color={index < lives ? Colors.purpura : '#444'} 
+      <Ionicons
+        key={index}
+        name="heart"
+        size={24}
+        color={index < lives ? Colors.purpura : '#444'}
       />
     ));
   };
@@ -141,16 +141,16 @@ export function HangmanGame() {
             text='EXIT'
             onPress={() => {
               resetGame();
-              router.back();  
+              router.back();
             }}
             borderTopLeftColor={Colors.purpuraClaro} borderBottomRightColor={Colors.purpuraOscuro}
           />
         </View>
-        
+
         <View style={styles.heartsContainer}>
           {renderHearts()}
         </View>
-        
+
         <View style={styles.scoreContainer}>
           <Text style={styles.playerText}>Player: {playerName}</Text>
           <Text style={styles.scoreText}>Score: {score}</Text>
@@ -159,14 +159,14 @@ export function HangmanGame() {
 
       <View style={styles.border}>
         <View style={styles.gameButtonsContainer}>
-          <ActionButton 
+          <ActionButton
             icon=''
             text='GUESS TITLE'
             onPress={() => setShowTitleModal(true)}
             borderTopLeftColor={Colors.purpuraClaro} borderBottomRightColor={Colors.purpuraOscuro}
             size={12}
           />
-          
+
           <ActionButton
             icon=''
             text='GUESS LETTER'
@@ -194,17 +194,17 @@ export function HangmanGame() {
         >
           <View style={styles.modalOverlay}>
             <View style={styles.modalContent}>
-              <TouchableOpacity 
-                style={styles.closeButton} 
+              <TouchableOpacity
+                style={styles.closeButton}
                 onPress={() => setShowTitleModal(false)}
               >
                 <Ionicons name="close" size={24} color="white" />
               </TouchableOpacity>
-              
+
               <TextPressStart2P style={styles.modalTitle}>
                 Guess the Title
               </TextPressStart2P>
-              
+
               <TextInput
                 style={styles.titleInput}
                 placeholder="Enter complete title"
@@ -213,11 +213,11 @@ export function HangmanGame() {
                 onChangeText={setTitleGuess}
                 autoFocus={true}
               />
-              
+
               <View style={styles.submitButtonTitle}>
                 <ActionButton
                   icon=''
-                  text='SUBMIT GUESS' 
+                  text='SUBMIT GUESS'
                   onPress={handleTitleGuess}
                   borderTopLeftColor={Colors.purpuraClaro} borderBottomRightColor={Colors.purpuraOscuro}
                 />
@@ -235,17 +235,17 @@ export function HangmanGame() {
         >
           <View style={styles.modalOverlay}>
             <View style={styles.modalContent}>
-              <TouchableOpacity 
-                style={styles.closeButton} 
+              <TouchableOpacity
+                style={styles.closeButton}
                 onPress={() => setShowLetterModal(false)}
               >
                 <Ionicons name="close" size={24} color="white" />
               </TouchableOpacity>
-              
+
               <TextPressStart2P style={styles.modalTitle}>
                 Guess a Letter
               </TextPressStart2P>
-              
+
               <View style={styles.alphabetGrid}>
                 {alphabet.map((letter) => (
                   <TouchableOpacity
@@ -281,16 +281,16 @@ export function HangmanGame() {
               <TextPressStart2P style={[styles.modalTitle, { color: Colors.purpura }]}>
                 GAME OVER
               </TextPressStart2P>
-              
+
               <Text style={[styles.playerText, { fontSize: 16, marginVertical: 10 }]}>
                 Player: {playerName}
               </Text>
-              
+
               <Text style={[styles.scoreText, { fontSize: 20, fontWeight: 'bold', marginBottom: 20 }]}>
                 Score: {score}
               </Text>
-              
-              <TouchableOpacity 
+
+              <TouchableOpacity
                 style={[styles.submitButton, { backgroundColor: Colors.verde }]}
                 onPress={handleReturnToStart}
               >
@@ -302,7 +302,7 @@ export function HangmanGame() {
           </View>
         </Modal>
       </View>
-      
+
     </SafeAreaView>
   );
 }

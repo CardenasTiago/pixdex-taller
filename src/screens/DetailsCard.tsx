@@ -1,12 +1,12 @@
 import React from "react";
 import { View, StyleSheet, SafeAreaView, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
-import { TextPressStart2P } from "@/src/components/font";
+import { TextPressStart2P } from "@/src/components/Font";
 import { contenidosAudiovisuales } from "@/src/data/contenidoAudiovisual";
 import { tiposContenidoAudiovisual } from "@/src/data/tiposContenidoAudiovisual";
 import { generosContenidoAudiovisual } from "@/src/data/generosContenidoAudiovisual";
-import { ActionButton } from "@/src/components/actionButtom";
-import { Label } from "@/src/components/lable";                
+import { ActionButton } from "@/src/components/ActionButton";
+import { Label } from "@/src/components/Label";
 import { Image } from "expo-image";
 import { Colors } from "@/src/constants/constants";
 
@@ -32,16 +32,16 @@ export const DetailsCard = ({ cardId }: Props) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll}>
-          <ActionButton
-            icon="arrow-back"
-            text="BACK"
-            onPress={() => router.back()}
-            size={18}
-            borderTopLeftColor={Colors.purpuraClaro} borderBottomRightColor={Colors.purpuraOscuro}
-          />
+        <ActionButton
+          icon="arrow-back"
+          text="BACK"
+          onPress={() => router.back()}
+          size={18}
+          borderTopLeftColor={Colors.purpuraClaro} borderBottomRightColor={Colors.purpuraOscuro}
+        />
         <View style={styles.border}>
           <View style={styles.card}>
-            <Image source={{ uri: contenido.imageUrl }} style={styles.image} contentFit="cover" />
+            <Image source={contenido.imageUrl} style={styles.image} contentFit="cover" />
 
             <View style={styles.info}>
               <TextPressStart2P style={styles.title}>{contenido.nombre}</TextPressStart2P>
@@ -71,12 +71,14 @@ export const DetailsCard = ({ cardId }: Props) => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.fondo },
-  border:{flex: 1,
+  border: {
+    flex: 1,
     borderWidth: 4,
     borderColor: Colors.grisOscuro,
     padding: 15,
     margin: 10,
-    borderRadius: 10,},
+    borderRadius: 10,
+  },
   scroll: { flexGrow: 1, padding: 16, paddingBottom: 24 },
   error: { color: "#FF5555", textAlign: "center", fontSize: 16 },
   card: {

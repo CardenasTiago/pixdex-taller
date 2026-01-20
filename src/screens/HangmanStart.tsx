@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
-import { 
-  StyleSheet, 
-  View, 
-  Text, 
-  TouchableOpacity, 
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
   SafeAreaView,
   Modal,
   TextInput,
-  Alert 
+  Alert
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { TextPressStart2P } from "@/src/components/font";
+import { TextPressStart2P } from "@/src/components/Font";
 import { Colors } from "@/src/constants/constants";
-import { ROUTES } from '../navegation/routes';
+import { ROUTES } from '../navigation/routes';
 import { useHangman } from '../context/hangmanContext';
-import { ActionButton } from '../components/actionButtom';
+import { ActionButton } from '../components/ActionButton';
 
 export function HangmanStart() {
   const router = useRouter();
@@ -47,73 +47,73 @@ export function HangmanStart() {
 
   return (
     <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
-            <ActionButton icon='arrow-back' text='BACK' onPress={handleBackPress} borderTopLeftColor={Colors.purpuraClaro} borderBottomRightColor={Colors.purpuraOscuro}/>
-          </View>
+      <View style={styles.header}>
+        <ActionButton icon='arrow-back' text='BACK' onPress={handleBackPress} borderTopLeftColor={Colors.purpuraClaro} borderBottomRightColor={Colors.purpuraOscuro} />
+      </View>
       <View style={styles.border}>
-          <View style={styles.content}>
-            <View style={styles.titleContainer}>
-              <TextPressStart2P style={styles.gameTitle}>
-                Hangman{'\n'}Challenge
-              </TextPressStart2P>
-            </View>
+        <View style={styles.content}>
+          <View style={styles.titleContainer}>
+            <TextPressStart2P style={styles.gameTitle}>
+              Hangman{'\n'}Challenge
+            </TextPressStart2P>
+          </View>
 
-            <Text style={styles.description}>
-              Guess the titles of popular TV shows, movies, and anime one letter at a time. 
-              You have 5 lives - can you get the highest score?
-            </Text>
+          <Text style={styles.description}>
+            Guess the titles of popular TV shows, movies, and anime one letter at a time.
+            You have 5 lives - can you get the highest score?
+          </Text>
 
-            <View style={styles.startButton}>
-              <ActionButton icon='' text='START GAME' onPress={handleStartGame} borderTopLeftColor={Colors.verde} borderBottomRightColor={Colors.verdeOscuro}/>
+          <View style={styles.startButton}>
+            <ActionButton icon='' text='START GAME' onPress={handleStartGame} borderTopLeftColor={Colors.verde} borderBottomRightColor={Colors.verdeOscuro} />
+          </View>
+          <View style={styles.leaderboardContainer}>
+            <TextPressStart2P style={styles.leaderboardTitle}>
+              Top Players
+            </TextPressStart2P>
+
+            <View style={styles.playersList}>
+              {topPlayers.map((player, index) => (
+                <View key={`${player.name}-${index}`} style={styles.playerRow}>
+                  <Text style={styles.playerRank}>{index + 1}.</Text>
+                  <Text style={styles.playerName}>{player.name}</Text>
+                  <Text style={styles.playerScore}>{player.score}</Text>
+                </View>
+              ))}
             </View>
-            <View style={styles.leaderboardContainer}>
-              <TextPressStart2P style={styles.leaderboardTitle}>
-                Top Players
+          </View>
+        </View>
+
+        <Modal
+          visible={showNameModal}
+          transparent={true}
+          animationType="fade"
+          onRequestClose={handleCloseModal}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <TouchableOpacity style={styles.closeButton} onPress={handleCloseModal}>
+                <Ionicons name="close" size={24} color="white" />
+              </TouchableOpacity>
+
+              <TextPressStart2P style={styles.modalTitle}>
+                Enter Your Name
               </TextPressStart2P>
-              
-              <View style={styles.playersList}>
-                {topPlayers.map((player, index) => (
-                  <View key={`${player.name}-${index}`} style={styles.playerRow}>
-                    <Text style={styles.playerRank}>{index + 1}.</Text>
-                    <Text style={styles.playerName}>{player.name}</Text>
-                    <Text style={styles.playerScore}>{player.score}</Text>
-                  </View>
-                ))}
+
+              <TextInput
+                style={styles.nameInput}
+                placeholder="Nombre del jugador"
+                placeholderTextColor="#999"
+                value={playerName}
+                onChangeText={setPlayerName}
+                maxLength={20}
+                autoFocus={true}
+              />
+              <View style={styles.startButton}>
+                <ActionButton icon='' text='START GAME' onPress={handleStartWithName} borderTopLeftColor={Colors.verde} borderBottomRightColor={Colors.verdeOscuro} />
               </View>
             </View>
           </View>
-
-          <Modal
-            visible={showNameModal}
-            transparent={true}
-            animationType="fade"
-            onRequestClose={handleCloseModal}
-          >
-            <View style={styles.modalOverlay}>
-              <View style={styles.modalContent}>
-                <TouchableOpacity style={styles.closeButton} onPress={handleCloseModal}>
-                  <Ionicons name="close" size={24} color="white" />
-                </TouchableOpacity>
-
-                <TextPressStart2P style={styles.modalTitle}>
-                  Enter Your Name
-                </TextPressStart2P>
-
-                <TextInput
-                  style={styles.nameInput}
-                  placeholder="Nombre del jugador"
-                  placeholderTextColor="#999"
-                  value={playerName}
-                  onChangeText={setPlayerName}
-                  maxLength={20}
-                  autoFocus={true}
-                />
-                <View style={styles.startButton}>
-                  <ActionButton icon='' text='START GAME' onPress={handleStartWithName} borderTopLeftColor={Colors.verde} borderBottomRightColor={Colors.verdeOscuro}/>
-                </View>
-              </View>
-            </View>
-          </Modal>
+        </Modal>
       </View>
     </SafeAreaView>
   );

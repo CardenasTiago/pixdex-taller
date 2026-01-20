@@ -1,4 +1,4 @@
-// src/navegation/routes.ts
+// src/navigation/routes.ts
 import { Href } from "expo-router";
 
 export const ROUTES: Record<string, Href> = {

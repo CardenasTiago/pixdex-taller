@@ -1,15 +1,15 @@
 import { StyleSheet, ScrollView, View, SafeAreaView } from "react-native";
-import { Navbar } from "@/src/components/navbar";       
-import { GameCard } from "@/src/components/games";
-import { CardScroll } from "@/src/components/cardsScroll";
+import { Navbar } from "@/src/components/Navbar";
+import { GameCard } from "@/src/components/Games";
+import { CardScroll } from "@/src/components/CardsScroll";
 import { Colors } from "@/src/constants/constants";
 import React, { useState, useEffect } from "react";
-import { FilterModal } from "../components/filter";
+import { FilterModal } from "../components/Filter";
 import { useContent } from "@/src/context/contentContext";
 
 export function HomeScreen() {
-  const { contenidos, tipos, generos} = useContent();
-  
+  const { contenidos, tipos, generos } = useContent();
+
   const [filterVisible, setFilterVisible] = useState(false);
   const [activeFilters, setActiveFilters] = useState({
     contentTypes: {} as Record<number, boolean>,
@@ -49,7 +49,7 @@ export function HomeScreen() {
 
     if (selectedGenres.length === 0) return items;
 
-    return items.filter(item => 
+    return items.filter(item =>
       item.generos && item.generos.some((genreId: number) => selectedGenres.includes(genreId))
     );
   };
@@ -57,7 +57,7 @@ export function HomeScreen() {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <Navbar onFilterPress={() => setFilterVisible(true)} />
-        
+
         <FilterModal
           visible={filterVisible}
           onClose={() => setFilterVisible(false)}
@@ -79,9 +79,9 @@ export function HomeScreen() {
         </View>
 
         {filteredContentTypes.map((tipo) => (
-          <CardScroll 
-            key={tipo.id} 
-            tipoId={tipo.id} 
+          <CardScroll
+            key={tipo.id}
+            tipoId={tipo.id}
             filterFunction={filterByGenres}
           />
         ))}
