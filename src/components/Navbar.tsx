@@ -1,9 +1,10 @@
-// src/components/Navbar.tsx
 import { View, StyleSheet, Dimensions } from "react-native";
 import { TextPressStart2P } from "@/src/components/Font";
 import { Colors } from "@/src/constants/constants";
 import { ActionButton } from "@/src/components/ActionButton";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
+import { ROUTES } from "@/src/navigation/routes";
 
 const { width } = Dimensions.get("window");
 const isSmallDevice = width < 375;
@@ -15,17 +16,30 @@ type Props = {
 };
 
 export function Navbar({ onFilterPress }: Props) {
+    const router = useRouter();
+
     return (
         <SafeAreaView>
             <View style={styles.navbar}>
                 <TextPressStart2P style={styles.title}>Pixdex</TextPressStart2P>
-                <ActionButton
-                    icon="settings"
-                    text="FILTRAR"
-                    onPress={onFilterPress}
-                    size={isSmallDevice ? 16 : isMediumDevice ? 18 : 20}
-                    borderTopLeftColor={Colors.purpuraClaro} borderBottomRightColor={Colors.purpuraOscuro}
-                />
+                <View style={styles.buttonsContainer}>
+                    <ActionButton
+                        icon="settings"
+                        text="FILTRAR"
+                        onPress={onFilterPress}
+                        size={isSmallDevice ? 14 : isMediumDevice ? 16 : 18}
+                        borderTopLeftColor={Colors.purpuraClaro}
+                        borderBottomRightColor={Colors.purpuraOscuro}
+                    />
+                    <ActionButton
+                        icon="person"
+                        text="LOGIN"
+                        onPress={() => router.push(ROUTES.LOGIN)}
+                        size={isSmallDevice ? 14 : isMediumDevice ? 16 : 18}
+                        borderTopLeftColor={Colors.purpuraClaro}
+                        borderBottomRightColor={Colors.purpuraOscuro}
+                    />
+                </View>
             </View>
         </SafeAreaView>
     );
@@ -40,8 +54,12 @@ const styles = StyleSheet.create({
         marginLeft: 15,
         marginRight: 15,
     },
+    buttonsContainer: {
+        flexDirection: "row",
+        gap: 8,
+    },
     title: {
-        fontSize: isSmallDevice ? 20 : isMediumDevice ? 22 : isLargeDevice ? 30 : 28,
+        fontSize: isSmallDevice ? 16 : isMediumDevice ? 18 : isLargeDevice ? 24 : 22,
         fontFamily: "PressStart2P",
         color: Colors.purpura,
     },
