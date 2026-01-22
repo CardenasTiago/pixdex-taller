@@ -6,6 +6,6 @@ export const ROUTES: Record<string, Href> = {
     DETAIL: "/detail/",
     HANGMAN: "/hangman",
     HANGMANGAME: "/hangmangame",
-    LOGIN: "/login" as any,
-    REGISTER: "/register" as any
+    LOGIN: "/login",
+    REGISTER: "/register"
 }
