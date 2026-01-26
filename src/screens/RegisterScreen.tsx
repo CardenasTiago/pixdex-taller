@@ -17,7 +17,6 @@ export function RegisterScreen() {
 
     const handleRegister = () => {
         console.log("Register:", username, email, password);
-        // Implementation for Supabase registration would go here
     };
 
     return (
