@@ -5,6 +5,9 @@ import { Colors } from "@/src/constants/constants";
 import { ActionButton } from "@/src/components/ActionButton";
 import { useRouter } from "expo-router";
 
+import { signUp } from "@/src/services/auth";
+import { Alert } from "react-native";
+
 const { width } = Dimensions.get("window");
 const isSmallDevice = width < 375;
 const isMediumDevice = width >= 375 && width < 768;
@@ -15,8 +18,16 @@ export function RegisterScreen() {
     const [password, setPassword] = useState("");
     const router = useRouter();
 
-    const handleRegister = () => {
-        console.log("Register:", username, email, password);
+    const handleRegister = async () => {
+        if (!email || !password || !username) {
+            Alert.alert("Error", "Por favor completa todos los campos");
+            return;
+        }
+        const { data, error } = await signUp(email, password, username);
+        if (!error) {
+            Alert.alert("Éxito", "Por favor verifica tu email");
+            router.back();
+        }
     };
 
     return (

@@ -1,10 +1,10 @@
 import { API_URL } from "@/src/constants/constants";
-import { IContenidoAudiovisual } from "@/src/data/contenidoAudiovisual";
+import { ContenidoAudiovisual } from "@/src/data/contenidoAudiovisual";
 import { ITipoContenidoAudiovisual } from "@/src/data/tiposContenidoAudiovisual";
 import { IGeneroContenidoAudiovisual } from "@/src/data/generosContenidoAudiovisual";
 
-export async function getContenidos(): Promise<IContenidoAudiovisual[]> {
-  const res = await fetch(`/contenidos`);
+export async function getContenidos(): Promise<ContenidoAudiovisual[]> {
+  const res = await fetch(`${API_URL}/contenidos`);
   if (!res.ok) {
     console.error("DETAILS:", await res.text());
     throw new Error(`Error ${res.status} al obtener contenidos`);
@@ -14,7 +14,7 @@ export async function getContenidos(): Promise<IContenidoAudiovisual[]> {
 }
 
 export async function getTipos(): Promise<ITipoContenidoAudiovisual[]> {
-  const responseTipos = await fetch(`/tipos`);
+  const responseTipos = await fetch(`${API_URL}/tipos`);
   if (!responseTipos.ok) {
     throw new Error("Error al obtener tipos");
   }
@@ -23,7 +23,7 @@ export async function getTipos(): Promise<ITipoContenidoAudiovisual[]> {
 }
 
 export async function getGeneros(): Promise<IGeneroContenidoAudiovisual[]> {
-  const responseGeneros = await fetch(`/generos`);
+  const responseGeneros = await fetch(`${API_URL}/generos`);
   if (!responseGeneros.ok) {
     throw new Error("Error al obtener generos");
   }

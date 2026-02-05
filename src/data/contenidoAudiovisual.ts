@@ -1,9 +1,21 @@
+import { IGeneroContenidoAudiovisual } from "./generosContenidoAudiovisual";
+import { ITipoContenidoAudiovisual } from "./tiposContenidoAudiovisual";
+
 export interface IContenidoAudiovisual {
   id: number;
   nombre: string;
   descripcion: string;
   generos: number[];
   tipoId: number;
+  imageUrl: string | number;
+}
+
+export interface ContenidoAudiovisual {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  generos: IGeneroContenidoAudiovisual[];
+  tipoId: ITipoContenidoAudiovisual;
   imageUrl: string | number;
 }
 
@@ -137,7 +149,7 @@ export const contenidosAudiovisuales: IContenidoAudiovisual[] = [
     imageUrl: "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_FMjpg_UX1000_.jpg",
   },
   {
-    id: 16 ,
+    id: 16,
     nombre: "The Matrix",
     descripcion: "Un hacker descubre la verdad sobre su realidad simulada.",
     generos: [4, 3],

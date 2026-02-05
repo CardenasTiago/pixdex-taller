@@ -5,6 +5,9 @@ import { ActionButton } from "@/src/components/ActionButton";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { ROUTES } from "@/src/navigation/routes";
+import { signOut, getCurrentUser } from "@/src/services/auth";
+import React, { useEffect, useState } from "react";
+import { User } from "@supabase/supabase-js";
 
 const { width } = Dimensions.get("window");
 const isSmallDevice = width < 375;
@@ -17,6 +20,25 @@ type Props = {
 
 export function Navbar({ onFilterPress }: Props) {
     const router = useRouter();
+    const [user, setUser] = useState<User | null>(null);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const currentUser = await getCurrentUser();
+            setUser(currentUser);
+        };
+        fetchUser();
+    }, []);
+
+    const handleAuthAction = async () => {
+        if (user) {
+            await signOut();
+            setUser(null);
+            router.replace(ROUTES.LOGIN as any);
+        } else {
+            router.push(ROUTES.LOGIN as any);
+        }
+    };
 
     return (
         <SafeAreaView>
@@ -32,9 +54,9 @@ export function Navbar({ onFilterPress }: Props) {
                         borderBottomRightColor={Colors.purpuraOscuro}
                     />
                     <ActionButton
-                        icon="person"
-                        text="LOGIN"
-                        onPress={() => router.push(ROUTES.LOGIN)}
+                        icon={user ? "log-out" : "person"}
+                        text={user ? "LOGOUT" : "LOGIN"}
+                        onPress={handleAuthAction}
                         size={isSmallDevice ? 14 : isMediumDevice ? 16 : 18}
                         borderTopLeftColor={Colors.purpuraClaro}
                         borderBottomRightColor={Colors.purpuraOscuro}

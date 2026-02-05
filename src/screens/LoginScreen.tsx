@@ -1,27 +1,39 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TextInput, Alert, SafeAreaView, Dimensions, ScrollView } from "react-native";
+import { View, StyleSheet, TextInput, Alert, SafeAreaView, Dimensions, ScrollView, ActivityIndicator } from "react-native";
 import { TextPressStart2P } from "@/src/components/Font";
 import { Colors } from "@/src/constants/constants";
 import { ActionButton } from "@/src/components/ActionButton";
 import { useRouter } from "expo-router";
 import { ROUTES } from "@/src/navigation/routes";
+import { signIn, isUsernameTaken } from "@/src/services/auth"; // Importamos la nueva función
 
 const { width } = Dimensions.get("window");
 const isSmallDevice = width < 375;
-const isMediumDevice = width >= 375 && width < 768;
 
 export function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert("Error", "Por favor completa todos los campos");
       return;
     }
-    console.log("Login:", email, password);
-    // navigation.navigate("HomeScreen");
+
+    setLoading(true);
+    const { data, error } = await signIn(email, password);
+    
+    if (error) {
+        setLoading(false);
+        return;
+    }
+
+    if (data?.user) {
+        router.replace(ROUTES.HOME as any);
+    }
+    setLoading(false);
   };
 
   return (
@@ -39,6 +51,7 @@ export function LoginScreen() {
             onChangeText={setEmail}
             keyboardType="email-address"
             autoCapitalize="none"
+            editable={!loading}
           />
 
           <TextPressStart2P style={[styles.label, { marginTop: 20 }]}>CONTRASEÑA</TextPressStart2P>
@@ -49,16 +62,22 @@ export function LoginScreen() {
             value={password}
             onChangeText={setPassword}
             secureTextEntry
+            autoCapitalize="none"
+            editable={!loading}
           />
 
           <View style={styles.buttonWrapper}>
-            <ActionButton
-              icon="log-in"
-              text="INGRESAR"
-              onPress={handleLogin}
-              borderTopLeftColor={Colors.purpuraClaro}
-              borderBottomRightColor={Colors.purpuraOscuro}
-            />
+            {loading ? (
+              <ActivityIndicator size="large" color={Colors.purpura} />
+            ) : (
+              <ActionButton
+                icon="log-in"
+                text="INGRESAR"
+                onPress={handleLogin}
+                borderTopLeftColor={Colors.purpuraClaro}
+                borderBottomRightColor={Colors.purpuraOscuro}
+              />
+            )}
           </View>
 
           <View style={styles.footer}>
@@ -89,7 +108,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: isSmallDevice ? 20 : isMediumDevice ? 24 : 28,
+    fontSize: isSmallDevice ? 20 : 28,
     color: Colors.purpura,
     marginBottom: 40,
     textAlign: "center",
